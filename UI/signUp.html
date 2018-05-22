@@ -5,8 +5,9 @@
     <title>Sign-Up</title>
     <link rel="shortcut icon" href="img/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
-    <!--<script src="js/main.js"></script>-->
+    <script src="js/main.js"></script>
 </head>
 <body>
     <div id="container">
@@ -18,8 +19,33 @@
                 <a href="#about">About</a>
                 <a href="#faq">FAQ</a>
             </div>
+        </div> 
+
+        <div class="sign-up">
+            <h3>Join the Maitenance Tracker Application! First set up your Account.</h3>
+            <form action="#" class="sign-upform">
+                <input type="text" placeholder="Email" required>
+                <br/>
+                <input type="text" placeholder="Username" required>
+                <br/>
+                <input type="password" placeholder="Password" id="password" required>
+                <br/>
+                <input type="password" placeholder="Confirm password" id="confirm-password" required>
+                <br/>
+                <input type="submit" value="Create My Account" required>
+
+            </form>
+            <p>Already have an account? <a href="signIn.html">Sign In</a></p>
+
 
         </div>
+
+        
+
+
+        <div class="footer"> 
+            <p id="date-footer"></p>
+        </div>  
 
     </div>
 </body>
