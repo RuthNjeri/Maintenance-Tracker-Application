@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Request</title>
+    <link rel="shortcut icon" href="img/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="header">
+            <a href="#" class="logo"><img id ="header-logo" src="img/logo.png" alt="Logo"></a>
+            <div class="header-right">
+                <a class ="active" href="AdminPage.html">Requests</a>
+                <a href="signIn.html">Sign Out</a>
+                <a href="#about">About</a>
+                <a href="#faq">FAQ</a>
+            </div>
+        </div>      
+        <div class="sign-up">
+            <table>
+                <tr>
+                    <td><h1>Title Of The Request</h1></td>
+                </tr>
+                <tr>
+                    <td>"Lorem ipsum dolor sit amet, 
+                        consectetur adipiscing elit, 
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
+                        nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                        reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
+                    </td>
+                </tr>
+                <tr>
+                    <td>Username</td>
+                </tr>
+                <tr>
+                        <td>Date</td>
+                </tr>
+            </table>
+            <form action="#" class="feedback">
+                <textarea type="text" placeholder="Feedback" required></textarea>
+                <br/>
+                <select class="type-select" name="type">
+                    <option value="choose-type" value="null">Select One Option</option>
+                    <option  class="others" value="repair">Resolve</option>
+                    <option  class="others" value="maintenance">Approve</option>
+                    <option  class="others" value="maintenance">Disapprove</option>
+                </select>
+                <br/>
+                <input type="submit" value="Submit" required>
+            </form>
+        </div>
+        <div class="footer"> 
+            <p id="date-footer"></p>
+        </div>  
+    </div>
+</body>
+</html>
