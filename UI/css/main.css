@@ -161,5 +161,9 @@ input[type=submit]:hover {
     
     }
 
+    #forgot-pw-link {
+        margin-left: 0px; 
+    }
+
 
 }
