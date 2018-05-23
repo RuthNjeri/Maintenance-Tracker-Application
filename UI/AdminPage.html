@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Requests</title>
+    <link rel="shortcut icon" href="img/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div class="header">
+            <a href="#" class="logo"><img id ="header-logo" src="img/logo.png" alt="Logo"></a>
+            <div class="header-right">
+                <a class ="active" href="AdminPage.html">User Requests</a>
+                <a href="signIn.html">Log Out</a>
+                <a href="#about">About</a>
+                <a href="#faq">FAQ</a>
+            </div>
+        </div> 
+        <div class="user-request-table">
+            <input type="text" placeholder="Search..">
+            <h3>All Requests</h3>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Username</th>
+                    <th>Status</th>
+                    <th>Feedback</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><a href="#">Computer won't start</a></td>
+                    <td>When I power up my computer I hear 3 beeps then it shuts down</td>
+                    <td>Repair</td>
+                    <td>12/02/94</td>
+                    <td>MarkT</td>
+                    <td>Resolved</td>
+                    <td>Please bring it to the technicians in 8th floor</td>
+                </tr>
+                <tr>
+                        <td>2</td>
+                        <td><a href="#">Data Centre Routine Check Up</a></td>
+                        <td>Request access to visit the data center for the end of year audit</td>
+                        <td>Maintenance</td>
+                        <td>9/02/94</td>
+                        <td>JaneD</td>
+                        <td>Approved</td>
+                        <td>Data centre has been given your ID to allow access</td>
+                </tr>
+                <tr>
+                        <td>3</td>
+                        <td><a href="#">Upgrade system</a></td>
+                        <td>Request to update the payroll system</td>
+                        <td>Maintenance</td>
+                        <td>20/01/94</td>
+                        <td>JohnD</td>
+                        <td>Disapproved</td>
+                        <td>The accountants request that you do it at the begining of next month</td>
+                </tr>
+
+
+            </table>
+        </div>
+        <div class="footer"> 
+            <p id="date-footer"></p>
+        </div>  
+    </div>
+</body>
+</html>
