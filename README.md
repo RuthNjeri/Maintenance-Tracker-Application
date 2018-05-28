@@ -12,6 +12,7 @@ Provides users with the ability to reach out to operations or repairs department
 2. User [signin](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/signIn.html).<br/>
 
 **A Page For The Admin To View All User Requests**<br/>
+
 3. [Admin can view all requests](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/AdminPage.html)<br/>
 
 **A Page Where An Admin Can Respond To All User Requests**<br/>
@@ -31,7 +32,8 @@ Provides users with the ability to reach out to operations or repairs department
 
 ### Testing ###
 
-```1. Clone or download the repository in the develop branch. <br>
+```
+   1. Clone or download the repository in the develop branch. <br>
    2. Navigate to the UI directory within the Maintenance-Tracker-Application folder.
    3. Right click the templates with the .html extension and open in a browser.
 ```
