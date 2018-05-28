@@ -9,7 +9,7 @@ Provides users with the ability to reach out to operations or repairs department
 
 **Sign In Page**<br/>
  
-2. User [signin](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/signIn.html).<br/>
+2. User [signin](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/signIn.html)<br/>
 
 **A Page For The Admin To View All User Requests**<br/>
 
@@ -28,7 +28,7 @@ Provides users with the ability to reach out to operations or repairs department
 
 **A Page For The User To Create Requests**<br/>
 
-6.[create requests](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/createRequest.html)<br />
+6. [create requests](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/createRequest.html)<br />
 
 ### Testing ###
 
