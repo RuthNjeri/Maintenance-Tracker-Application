@@ -1,73 +1,78 @@
 #container {
     width:100%;
     height:100%;
-    border-radius:15px;
+
+
 }
+
 
 body {
 margin: 0;
-font-family: Bookman;
+font-family:'Montserrat';
+
 }
 
 #header-logo {
-    border-radius: 50%;
+
     width: 50px;
     height: 50px;
     float: left;
     margin-top:-10px;  
 }
 
+#signin-link {
+    margin-left: 2.5px;
+}
+
 .header {
     overflow: hidden;
-    background-color: #14485F;
+    background-color:#0074B6;
     padding: 20px 10px;
-    border-radius:15px; 
+
      
 }
 
 .header a {
     float: left;
-    color: rgb(102, 101, 101);
+    color: #ffffff;
     text-align: center;
-    border-radius:4px;
     text-decoration: none; 
     padding: 12px;
     font-size: 18px;   
-    font-family: Bookman;
+
 }
 
 .header a.active {
-    background-color: #0074D9;
     color: white;
 }
 
 .header a:hover {
-    background-color: #ddd;
     color: black;
+    text-decoration: underline;
 }
 
 
 .header-right {
     float: right; 
-    font-family: Bookman;  
+
 }
 
 .footer {
-position: fixed;
-bottom: 0;
-background-color:#f2f2f2;
-padding: 10px 2px 10px 10px;
-border-radius:15px;  
+
+background-color:#036499;
 width: 100%;
-height: 5%;
-font-family: Bookman;
+left: 0;
+bottom: 0;
+color: #ffffff;
+overflow:hidden;
+
+
 
 }
 
 
 .sign-up {
-    border-radius: 5px;
-    background-color: #f2f2f2;
+
     margin: 0 auto;
     width: 700px;
     padding: 10px;
@@ -75,28 +80,22 @@ font-family: Bookman;
 }
 
 .sign-up h3 {
-    text-align: center;
+    margin-left: 75px;
     margin-top: 2px;
-    font-family: Bookman;
+
 }
 
 .sign-upform {
     margin-left: 75px;
-    border-radius:15px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background:#9e9e9e;
     width: 500px;
-    font-family: Bookman;
+
 
 }
 
 .sign-up input[type=text] {
     width: 300px;
     padding: 12px 20px;
-    border-radius: 15px;
     margin: 8px 0;
-    font-family: Bookman;
     font-size: 100%;
     
 }
@@ -104,38 +103,42 @@ font-family: Bookman;
 .sign-up input[type=password] {
     width: 300px;
     padding: 12px 20px;
-    border-radius: 15px;
     margin: 8px 0;
-    font-family: Bookman;
+    font-size: 100%;
 }
 
 .sign-up input[type=submit] {
     width: 300px;
-    background-color: #00c853;
-    color: white;
+    padding: 12px 20px;
     margin: 8px 0;
-    border-radius: 15px;
+    background-color:#0074B6;;
+    color: white;
     cursor: pointer;
-    padding: 14px 20px;
-    font-family: Bookman;
     font-size: 100%;
 }
 
 .sign-up textarea {
     width: 300px;
     padding: 12px 20px;
-    border-radius: 15px;
     margin: 8px 0;
-    font-family: Bookman;
-    font-size: 10;
-    height: 100px;;
+    font-size: 180%;
+    height: 100px;
 
 }
 
 input[type=submit]:hover {
-    background-color: #1b5e20;
-    font-family: Bookman;
+    background-color:rgb(5, 55, 85);;
+
     
+}
+
+.sign-up a {
+    text-decoration: none; 
+    color: black;
+}
+
+.sign-up a:hover {
+    text-decoration: underline;
 }
 
 .sign-up p {
@@ -144,7 +147,8 @@ input[type=submit]:hover {
 }
 
 #forgot-pw-link {
-    margin-left: 230px; 
+    margin-left: 2.5px;
+    
 }
 
 .user-request-table {
@@ -156,7 +160,6 @@ table {
     border-collapse: separate;
     width: 100%;
     border: solid #9e9e9e 3px;
-    border-radius: 5px; 
 }
 
 td, th {
@@ -166,7 +169,7 @@ td, th {
 }
 
 tr:nth-child(odd) {
-    background-color: rgb(0,116,217);  
+    background-color:grey;  
 }
 
 tr:nth-child(even) {
@@ -177,16 +180,13 @@ tr:nth-child(even) {
     float: right;
     font-size: 17px;   
     border: solid 1px #9e9e9e;
-    border-radius: 6px;
     margin-top: 0px; 
 }
 
 .type-select {
     width: 300px;
     padding: 12px 20px;
-    border-radius: 15px;
     margin: 8px 0; 
-    font-family: Bookman;
     font-size: 100%;
     color: grey;
 }
@@ -231,10 +231,6 @@ tr:nth-child(even) {
         margin: 0;
     }
 
-    .sign-up p {
-        margin-bottom: 80px;
-    
-    }
 
     #forgot-pw-link {
         margin-left: 0px; 
@@ -242,6 +238,9 @@ tr:nth-child(even) {
 
     .user-request-table {
         margin: 0px;
+    }
+    .footer {
+        height: 10px;
     }
     
 
