@@ -33,7 +33,7 @@ Provides users with the ability to reach out to operations or repairs department
 ### Testing ###
 
 ```
-   1. Clone or download the repository in the develop branch. <br>
+   1. Clone or download the repository in the develop branch. 
    2. Navigate to the UI directory within the Maintenance-Tracker-Application folder.
    3. Right click the templates with the .html extension and open in a browser.
 ```
