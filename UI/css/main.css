@@ -64,9 +64,7 @@ width: 100%;
 left: 0;
 bottom: 0;
 color: #ffffff;
-overflow:hidden;
-
-
+position: fixed;
 
 }
 
@@ -152,7 +150,7 @@ input[type=submit]:hover {
 }
 
 .user-request-table {
-    margin: 0px 200px;
+    margin-bottom: 0,20px,20px,50px;
 }
 
 table {
