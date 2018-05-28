@@ -3,25 +3,24 @@
 <head>
     <meta charset="utf-8" />
     <title>Sign-Up</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="shortcut icon" href="img/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
     <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
     <script src="js/main.js"></script>
 </head>
 <body>
     <div id="container">
         <div class="header">
-            <a href="#" class="logo"><img id ="header-logo" src="img/logo.png" alt="Logo"></a>
+            <img id ="header-logo" src="img/logo.png" alt="Logo">
             <div class="header-right">
-                <a class ="active" href="signUp.html">Sign Up</a>
                 <a href="signIn.html">Sign In</a>
                 <a href="#about">About</a>
                 <a href="#faq">FAQ</a>
             </div>
         </div>      
         <div class="sign-up">
-            <h3>Join the Maitenance Tracker Application! First set up your Account.</h3>
+            <h3>Set up your Account!</h3>
             <form action="#" class="sign-upform">
                 <input type="text" placeholder="Email" required>
                 <br/>
@@ -31,9 +30,9 @@
                 <br/>
                 <input type="password" placeholder="Confirm password" id="confirm-password" required>
                 <br/>
+                <p id="signin-link">Already have an account? <a href="signIn.html">Sign In</a></p>
                 <input type="submit" value="Create My Account" required>
-            </form>
-            <p>Already have an account? <a href="signIn.html">Sign In</a></p>
+            </form><br/>
         </div>
         <div class="footer"> 
             <p id="date-footer"></p>
