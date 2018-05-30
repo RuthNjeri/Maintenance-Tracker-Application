@@ -1,14 +1,18 @@
 #test_api-tracker.py
-from app import app
+
+import sys
 import unittest
 import json
+from app import create_app
+
 
 
 #The class containing the testcases of the api
 class MaintenanceTrackerApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.app = app.test_client()
+        self.app = create_app(config_name="testing")
+        self.client = self.app.test_client
         self.request = {
 
                         'id': 1,
@@ -17,12 +21,35 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
                         'type':'maintenance'  
                         
                         }
+        self.register_user = {
+
+                              'username':'janD',
+                              'email': 'jan@gmail.com',
+                              'password':'1234'  
+        
+                             }                
+
+    def test_user_signup(self):
+        """
+        Test if user is created successfully through the endpoint
+        """                       
+        resource = self.client().post('/users/signup',data=self.register_user)
+        self.assertEqual(resource.status_code,201)
+
+    def test_user_signin(self):
+        """
+        Test if user is logged in successfully through the endpoint
+        """                       
+        resource = self.client().post('/users/',data=self.register_user)
+        self.assertEqual(resource.status_code,201)
+        resource = self.client().get('/users/')
+        self.assertEqual(resource.status_code,200)   
 
     def test_create_request(self):
         """
         Test that a user can create a request
         """
-        resource = self.app.post('/users/requests/', data=self.request)
+        resource = self.client().post('/users/requests/', data=self.request)
         self.assertEqual(resource.status_code,201)
         self.assertIn(self.request,str(resource.data))
 
@@ -31,9 +58,9 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         Test that a user can read all their requests or 
         get back an empty dictionary if they do not have requests
         """
-        resource = self.app.post('/users/requests/',data=self.request)
+        resource = self.client().post('/users/requests/',data=self.request)
         self.assertEqual(resource.status_code,201)
-        resource = self.app.get('/users/requests/')
+        resource = self.client().get('/users/requests/')
         self.assertEqual(resource.status_code,200)
         self.assertIn(self.request,dict(resource.data))
 
@@ -41,10 +68,10 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         """
         Return an empty dictionary if requests are empty
         """
-        resource = self.app.post('/users/requests/',data={})
+        resource = self.client().post('/users/requests/',data={})
         self.assertEqual(resource.status_code,201)
         self.assertIn(self.request,dict(resource.data))
-        resource = self.app.get('/users/requests/')
+        resource = self.client().get('/users/requests/')
         self.assertEqual(resource.status_code,200)
         self.assertIn(self.request,dict(resource.data))
  
@@ -54,10 +81,10 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         Test that a user request is returned
         when the request ID is specified
         """    
-        resource = self.app.post('/users/requests/',data=self.request)
+        resource = self.client().post('/users/requests/',data=self.request)
         self.assertEqual(resource.status_code,201)
         json_result = json.loads(resource.data.decode())
-        resource = self.app.get('/users/requests/{}'.format(json_result['id']))
+        resource = self.client().get('/users/requests/{}'.format(json_result['id']))
         self.assertEqual(resource.status_code,200)
         self.assertIn(self.request,dict(resource.data))
 
@@ -66,7 +93,15 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         Test that a user request is not returned
         when the request ID is specified
         """ 
-        resource = self.app.get('/users/requests/1')
+        resource = self.client().get('/users/requests/1')
+        self.assertEqual(resource.status_code,404)
+
+    def test_read_request_with_non_existing_id(self):
+        """
+        Test that a user request is returned
+        when the request ID is specified
+        """    
+        resource = self.client().get('/users/requests/9')
         self.assertEqual(resource.status_code,404)
 
 
@@ -74,10 +109,10 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         """
         Test that a request can be modified
         """
-        resource = self.app.post('/users/requests/',data=self.request)
+        resource = self.client().post('/users/requests/',data=self.request)
         self.assertEqual(resource.status_code,201)
         json_result = json.loads(resource.data.decode())
-        resource = self.app.put(
+        resource = self.client().put(
                                 '/users/requests/{}'.format(json_result['id']),
                                 data = {
                                         'id': 1,
@@ -88,13 +123,13 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
                                         }
                                 )
         self.assertEqual(resource.status_code,200)
-        resource =self.app.get(
+        resource =self.client().get(
                                 '/users/requests/{}'.format(json_result['id'])
                                 )
         self.assertNotEqual(self.request['title'],resource['title'])
 
     def test_update_on_request_not_existing(self): 
-        resource = self.app.put(
+        resource = self.client().put(
                                 '/users/requests/5',
                                 data = {
                                         'id': 5,
@@ -107,15 +142,15 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         self.assertEqual(resource.status_code,404)                         
 
     def test_delete_request(self):
-        resource = self.app.post('/users/requests/',data=self.request)
+        resource = self.client().post('/users/requests/',data=self.request)
         self.assertEqual(resource.status_code,201)
         json_result = json.loads(resource.data.decode())
-        resource = self.app.delete('/users/requests/{}'.format(json_result['id']))
-        resource = self.app.get('/users/requests/{}'.format(json_result['id']))
+        resource = self.client().delete('/users/requests/{}'.format(json_result['id']))
+        resource = self.client().get('/users/requests/{}'.format(json_result['id']))
         self.assertEqual(resource.status_code,404)
 
     def test_delete_request_not_existing(self):
-        resource = self.app.delete('/users/requests/5')  
+        resource = self.client().delete('/users/requests/5')  
         self.assertEqual(resource.status_code,404)
         
 
