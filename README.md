@@ -14,7 +14,7 @@ Provides users with the ability to reach out to operations or repairs department
 Navigate inside the Maintenance-Tracker-Application folder. `cd app` folder. open the `__init__.py`. Test the endpoints using [Postman](https://www.getpostman.com/)
 
 ## Screenshots
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Post_request_qafbgq.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527702370/NewnewPost_oyur5r.png)
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/DeleteRequest_pmwq7u.png)
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Get_Requests_l3o8pu.png)
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/get_request_with_id_kb2iwv.png)
