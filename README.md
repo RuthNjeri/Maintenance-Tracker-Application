@@ -57,7 +57,11 @@ Provides users with the ability to reach out to operations or repairs department
 **Admin Respond To User Requests Page**
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/AdminRespondTorequests_fnuz6m.png)
    
-   
+##### Testing Endpoints #####
+Navigate inside the Maintenance-Tracker-Application folder.<br>
+Install pytest with the command `pip install pytest` .<br>
+Run the command ```python -m pytest tests/```
+
    
    
    
