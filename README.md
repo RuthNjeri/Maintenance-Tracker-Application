@@ -1,6 +1,25 @@
 # Maintenance-Tracker-Application #
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
+## API ENDPOINTS ##
+| HTTP Method   | URI                                                                 | Action                    |
+| ------------- |:-------------------------------------------------------------------:|-----------------------:   |
+| GET	          |http://[hostname]/maintenanceTrackerApp/api/v1/requests	             |Retrieve list of requests  |  
+| GET           |http://[hostname]/maintenanceTrackerApp/api/v1/requests/[request_id] |Retrieve a request         |  
+| POST          |http://[hostname]/maintenanceTrackerApp/api/v1/requests              |Create a new request       |   
+| PUT           |http://[hostname]/maintenanceTrackerApp/api/v1/requests/[request_id] |Update an existing request |       
+| DELETE        |http://[hostname]/maintenanceTrackerApp/api/v1/requests/[request_id] |Delete an existing request | 
+
+## Testing the Endpoints
+Navigate inside the Maintenance-Tracker-Application folder. `cd app` folder. open the `__init__.py`. Test the endpoints using [Postman](https://www.getpostman.com/)
+
+## Screenshots
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Post_request_qafbgq.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/DeleteRequest_pmwq7u.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Get_Requests_l3o8pu.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/get_request_with_id_kb2iwv.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Put_request_gzdtxj.png)
+
 ## UI Tasks ##
 
 **Sign Up Page**<br/>
