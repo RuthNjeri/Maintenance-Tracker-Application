@@ -1,1 +1,3 @@
-[]
+[
+  "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_user_signin"
+]
