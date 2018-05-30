@@ -11,7 +11,8 @@ from app import create_app
 class MaintenanceTrackerApiTest(unittest.TestCase):
 
     def setUp(self):
-        self.app = create_app(config_name="testing")
+        self.app = create_app() 
+        # config_name="testing"
         self.client = self.app.test_client
         self.request = {
 
