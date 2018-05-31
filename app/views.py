@@ -55,7 +55,7 @@ def create_request():
         if len(requests)==0:    
             app_request = {
 
-                        'id': len(request)+1,
+                        'id': request.json['id']+1,
                         'title': request.json['title'],
                         'description': request.json['description'],
                         'type':request.json['type']
@@ -106,7 +106,7 @@ def create_user():
         
             app_request = {
 
-                        'id': len(user)+1,
+                        'id': request.json['id']+1,
                         'email': request.json['email'],
                         'password': request.json['password'],
 
