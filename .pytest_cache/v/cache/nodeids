@@ -1,3 +1,14 @@
 [
-  "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_user_signin"
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_create_empty_request",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_create_request",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_delete_request",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_delete_request_not_existing",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_no_request_with_id",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_request",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_request_with_id",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_request_with_non_existing_id",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_update_on_request_not_existing",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_update_requests",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_user_signin",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_user_signup"
 ]
