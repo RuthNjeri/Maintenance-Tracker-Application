@@ -91,9 +91,10 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
     def test_read_request_with_id(self):
         """
         Test that a user request is returned
-        when the request ID is specified
+        when the request ID is specified.
+        This test runs independently
         """    
-        
+
         resource = self.client().post('/maintenanceapp/api/v1/requests', data=json.dumps(self.request)
                                           ,content_type='application/json')
         self.assertEqual(resource.status_code,201)
@@ -119,23 +120,23 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         resource = self.client().get('/maintenaneapp/api/v1/requests/9')
         self.assertEqual(resource.status_code,404)
 
-
+     
     def test_update_requests(self):
-        """
+        """ Not yet working  
         Test that a request can be modified
         """
-        resource = self.client().post('/maintenanceapp/api/v1/requests/', data=json.dumps(self.request)
-                                           ,content_type='application/json')
-        self.assertEqual(resource.status_code,201)        
-        resource = self.client().put('/maintenaneapp/api/v1/requests/1'
-                                ,data=json.dumps(self.request)
+        resource = self.client().post('/maintenanceapp/api/v1/requests', data=json.dumps(self.request)
+                                          ,content_type='application/json')
+        self.assertEqual(resource.status_code,201)
+        json_result = json.loads(resource.data.decode()) 
+        json_result2 = json_result['app_request']['title']='new'     
+        resource = self.client().put('/maintenaneapp/api/v1/requests/{}'.format(json_result['app_request']['id'])
+                                ,data=json.dumps(json_result2)
                                 ,content_type='application/json')
-
-                                
         self.assertEqual(resource.status_code,200)
-        resource =self.client().get(
-                                '/maintenaneapp/api/v1/requests/1'
-                                )
+        json_result = json.loads(resource.data.decode())
+        resource = self.client().get('/maintenaneapp/api/v1/requests/{}'.format(json_result['app_request']['id']))
+        self.assertEqual(resource.status_code,200)  
         self.assertDictEqual(json_result['app_request'],self.request)
 
     def test_update_on_request_not_existing(self): 
@@ -159,11 +160,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         self.assertEqual(resource.status_code,404)
         
 
-    def tearDown(self):
-        """teardown all initialized variables."""
-        with self.app.app_context():
-            # remove saved items
-            self.request={}
+
 
 
 
