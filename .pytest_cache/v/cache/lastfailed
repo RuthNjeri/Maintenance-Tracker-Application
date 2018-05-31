@@ -5,8 +5,5 @@
   "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_read_request": true,
   "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_read_request_with_id": true,
   "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_update_requests": true,
-  "tests/test_api_tracker.py::MaintenanceTrackerApiTest": true,
-  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_empty_request": true,
-  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_request_with_id": true,
-  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_update_requests": true
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_empty_request": true
 }

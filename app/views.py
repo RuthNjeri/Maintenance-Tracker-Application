@@ -51,8 +51,7 @@ def request_not_found(error):
 def create_request():   
         if not request.json or not 'title' in request.json:
             abort(400)
-        if len(requests)==0:
-            print(1)    
+        if len(requests)==0:    
             app_request = {
 
                         'id': request.json['id'],
@@ -62,8 +61,7 @@ def create_request():
             
                         }
             requests.append(app_request)
-        else:
-            print(2)    
+        else:   
             app_request = {
 
                     'id': requests[-1]['id'] + 1,
