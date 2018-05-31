@@ -1,5 +1,5 @@
-# #app/views.py
-# #!flask/bin/python
+ #app/views.py
+
 
 
 from flask import Flask,request,jsonify,abort
@@ -55,7 +55,7 @@ def create_request():
         if len(requests)==0:    
             app_request = {
 
-                        'id': request.json['id'],
+                        'id': len(request)+1,
                         'title': request.json['title'],
                         'description': request.json['description'],
                         'type':request.json['type']
@@ -97,7 +97,7 @@ def delete_task(request_id):
         if len(request) == 0:
             abort(404)
         request.remove(request[0])
-        return jsonify({'result': True})    
+        return jsonify({'message': 'Successfully deleted' })    
 
 
 @app.route('/maintenanceapp/api/v1/users/', methods=['POST'])
@@ -106,7 +106,7 @@ def create_user():
         
             app_request = {
 
-                        'id': request.json['id'],
+                        'id': len(user)+1,
                         'email': request.json['email'],
                         'password': request.json['password'],
 
