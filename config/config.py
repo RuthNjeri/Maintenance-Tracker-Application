@@ -1,4 +1,4 @@
-#config file
+#config/config file
 
 import os
 
