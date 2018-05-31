@@ -31,9 +31,6 @@ from app   import app
 requests = []
 users = []
 
-@app.route('/')
-def hello():
-    return "Maintenance Tracker application Deployed!"
 
 @app.route('/maintenanceapp/api/v1/requests', methods=['GET'])
 def get_requests():
