@@ -1,42 +1,42 @@
-#app/views.py
-#!flask/bin/python
+# #app/views.py
+# #!flask/bin/python
 
 
 from flask import Flask,request,jsonify,abort
 from flask import make_response
 from app   import app
-"""
-            Sample of requests
-            {
-            'id': 1,
-            'title': 'Computer will not start',
-            'description': 'The computer beeps three times then goes off',
-            'type': 'repair'
-            },
+# """
+#             Sample of requests
+#             {
+#             'id': 1,
+#             'title': 'Computer will not start',
+#             'description': 'The computer beeps three times then goes off',
+#             'type': 'repair'
+#             },
             
-            {
-            'id': 2,
-            'title': 'Access to the data centre',
-            'description': 'There are updates that need to be installed on the servers',
-            'type': 'maintenance'
-            },
+#             {
+#             'id': 2,
+#             'title': 'Access to the data centre',
+#             'description': 'There are updates that need to be installed on the servers',
+#             'type': 'maintenance'
+#             },
 
-            {
-            'id': 3,
-            'title': 'Computer keyboard not working',
-            'description': 'I acidentally poured coffee on my keyboard',
-            'type': 'repair'
-            }
-            """
+#             {
+#             'id': 3,
+#             'title': 'Computer keyboard not working',
+#             'description': 'I acidentally poured coffee on my keyboard',
+#             'type': 'repair'
+#             }
+#             """
 requests = []
 users = []
 
-@app.route('/maintenanceTrackerApp/api/v1/requests', methods=['GET'])
+@app.route('/maintenanceapp/api/v1/requests', methods=['GET'])
 def get_requests():
 
     return jsonify({'requests':requests})
 
-@app.route('/maintenanceTrackerApp/api/v1/requests/<int:request_id>', methods=['GET'])
+@app.route('/maintenaneapp/api/v1/requests/<int:request_id>', methods=['GET'])
 def get_request(request_id):
         request = [request for request in requests if request['id']==request_id]
         if len(request) == 0:
@@ -47,7 +47,7 @@ def get_request(request_id):
 def request_not_found(error):
         return make_response(jsonify({'error':'Not found'}),404)  
 
-@app.route('/maintenanceTrackerApp/api/v1/requests', methods=['POST'])
+@app.route('/maintenanceapp/api/v1/requests', methods=['POST'])
 def create_request():   
         if not request.json or not 'title' in request.json:
             abort(400)
@@ -78,7 +78,7 @@ def create_request():
         return jsonify({'app_request':app_request}),201     
 
 
-@app.route('/maintenanceTrackerApp/api/v1/requests/<int:request_id>', methods=['PUT'])
+@app.route('/maintenanceapp/api/v1/requests/<int:request_id>', methods=['PUT'])
 def update_request(request_id):
         update_request = [request for request in requests if request['id']==request_id]
         if len(update_request) == 0:
@@ -92,7 +92,7 @@ def update_request(request_id):
         update_request[0]['type'] = request.json.get('type', update_request[0]['type'])
         return jsonify({'update_request': update_request[0]})   
 
-@app.route('/maintenanceTrackerApp/api/v1/requests/<int:request_id>', methods=['DELETE'])
+@app.route('/maintenanceapp/api/v1/requests/<int:request_id>', methods=['DELETE'])
 def delete_task(request_id):
         request = [request for request in requests if request['id']==request_id]        
         if len(request) == 0:
@@ -101,7 +101,7 @@ def delete_task(request_id):
         return jsonify({'result': True})    
 
 
-@app.route('/maintenanceTrackerApp/api/v1/users/', methods=['POST'])
+@app.route('/maintenanceapp/api/v1/users/', methods=['POST'])
 def create_user():
     if len(users)==0:
         
@@ -129,7 +129,7 @@ def create_user():
 
     return jsonify({'app_request':app_request}),201     
 
-@app.route('/maintenanceTrackerApp/api/v1/users/login', methods=['POST'])
+@app.route('/maintenanceapp/api/v1/users/login', methods=['POST'])
 def login_user():
 
     email = request.json['email']
