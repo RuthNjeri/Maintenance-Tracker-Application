@@ -56,7 +56,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
                                         ,content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code,201)
-        self.assertDictEqual(data['app_request'],self.request)
+        self.assertIn(data['app_request']['title'],self.request['title'])
 
     def test_read_request(self):
         """
@@ -104,7 +104,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         Test that a user request is not returned
         when the request ID is specified
         """ 
-        resource = self.client().get('/maintenaneapp/api/v1/requests/9')
+        resource = self.client().get('/maintenaneapp/api/v1/requests/100')
         self.assertEqual(resource.status_code,404)
 
     def test_read_request_with_non_existing_id(self):
@@ -112,7 +112,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         Test that a user request is returned
         when the request ID is specified
         """    
-        resource = self.client().get('/maintenaneapp/api/v1/requests/9')
+        resource = self.client().get('/maintenaneapp/api/v1/requests/100')
         self.assertEqual(resource.status_code,404)
 
      
@@ -130,7 +130,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
  
 
     def test_update_on_request_not_existing(self): 
-        resource = self.client().put('/maintenanceapp/api/v1/requests/5'
+        resource = self.client().put('/maintenanceapp/api/v1/requests/100'
                                     ,data=json.dumps(self.request)
                                     ,content_type='application/json')
                                 
