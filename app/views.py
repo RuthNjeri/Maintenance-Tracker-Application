@@ -35,6 +35,7 @@ from . import app
 requests = []
 users = []
 logged_in_user = ""
+session = []
 
 @app.route('/')
 def hello():
@@ -111,8 +112,6 @@ def create_user():
             
                         }
     users.append(app_request)
-
-
     return jsonify({'app_request':app_request}),201     
 
 @app.route('/api/v1/users/login', methods=['POST'])
@@ -123,6 +122,31 @@ def login_user():
 
     for u in users:
         if u['email'] == email and u['password'] == password:
-            logged_in_user = email
+            logged_in = u['email']
             return jsonify({'logged_in': True}) 
-    return jsonify({'logged_in': False})         
+    return jsonify({'logged_in': False}) 
+    """logged in user create request
+    """
+@app.route('/api/v1/users/<logged_in>/request', methods=['POST'])    
+def logged_in_user_create_request(logged_in):
+    if logged_in:
+        app_request = {
+                        'email':logged_in,
+                        'id': len(session)+1,
+                        'title': request.json['title'],
+                        'description': request.json['description'],
+                        'type':request.json['type']
+            
+                        }
+        session.append(app_request)
+        return jsonify({'Request':"Created"}),201
+
+@app.route('/api/v1/users/<logged_in>/request', methods=['GET'])
+def logged_in_user_get_request(logged_in):
+    if logged_in:
+        request = [request for request in session if request['email']==logged_in]
+        return jsonify({'request':request})
+    return jsonify({'request':'no requests'})    
+
+
+
