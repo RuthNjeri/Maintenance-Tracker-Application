@@ -10,30 +10,68 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         self.app = app 
         # config_name="testing"
         self.client = self.app.test_client
-        self.register_user = {
-                              'id': 1,  
-                              'email': 'jan@gmail.com',
-                              'password':'1234'  
-        
-                             }                
- 
-        
-                                            
-    def test_user_signup(self):
+                                   
+    def test_user_signup_signin(self):
         """
         Test if user is created successfully through the endpoint
         """                       
-        resource = self.client().post('/api/v1/users/',data=json.dumps(self.register_user)
-                                       ,content_type='application/json')
+        resource = self.client().post('/api/v1/users/',data=json.dumps      
+                                                        ({
+                                                            'id': 1,  
+                                                            'email': 'jan@gmail.com',
+                                                            'password':'1234'
+                                                         })
+                                                            ,content_type='application/json')
         self.assertEqual(resource.status_code,201)
-
-    def test_user_signin(self):
         """
-        Test if user with wrong credentials is logged in unsuccessfully through the endpoint
-        """ 
-        resource = self.client().post('/api/v1/users/login',data=json.dumps({'id':3,
-                                                                            'email':'hhh',
-                                                                            'password':'hhh'})
+        Test if can sign in
+        """                       
+        resource = self.client().post('/api/v1/users/login',data=json.dumps({
+                                                                            'email':'jan@gmail.com',
+                                                                            'password':'1234'
+                                                                            })
+                                        ,content_type='application/json')
+        self.assertEqual(resource.status_code,200)
+
+    def test_user_signup_signin_wrong_credentials(self):
+        """
+        Test if user is created successfully through the endpoint
+        """                       
+        resource = self.client().post('/api/v1/users/',data=json.dumps
+                                                    ({
+                                                      'id': 1,  
+                                                      'email': 'jan@gmail.com',
+                                                      'password':'1234'  
+                                                      })
+                                                    ,content_type='application/json')
+        self.assertEqual(resource.status_code,201)
+        """
+        Test if user with wrong password credentials can sign in
+        """                       
+        resource = self.client().post('/api/v1/users/login',data=json.dumps({
+                                                                            'email':'jan@gmail.com',
+                                                                            'password':'123'
+                                                                            })
+                                        ,content_type='application/json')
+        self.assertEqual(resource.status_code,400)
+        """
+        Test if user with wrong email credentials can sign in
+        """   
+        resource = self.client().post('/api/v1/users/login',data=json.dumps({
+                                                                            'email':'j@gmail.com',
+                                                                            'password':'1234'
+                                                                            })
+                                        ,content_type='application/json')
+        self.assertEqual(resource.status_code,400)
+
+    def test_user_not_signup_can_signin(self):
+        """
+        Test if user not signed up can sign in
+        """                       
+        resource = self.client().post('/api/v1/users/login',data=json.dumps({
+                                                                            'email':'jan@gmail.com',
+                                                                            'password':'123'
+                                                                            })
                                         ,content_type='application/json')
         self.assertEqual(resource.status_code,400)
 
