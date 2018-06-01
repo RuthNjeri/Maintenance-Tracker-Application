@@ -42,6 +42,8 @@ def hello():
 
 @app.route('/api/v1/requests', methods=['GET'])
 def get_requests():
+    if len(requests) == 0:
+            abort(404)
 
     return jsonify({'requests':requests})
 
