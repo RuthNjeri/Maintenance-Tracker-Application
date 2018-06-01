@@ -1,4 +1,4 @@
-# Maintenance-Tracker-Application #
+# Maintenance-Tracker-Application  [![Build Status](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application.svg?branch=master)](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application)
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
 ## API ENDPOINTS ##
