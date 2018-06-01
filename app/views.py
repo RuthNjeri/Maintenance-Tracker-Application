@@ -141,12 +141,19 @@ def logged_in_user_create_request(logged_in):
         session.append(app_request)
         return jsonify({'Request':"Created"}),201
 
-@app.route('/api/v1/users/<logged_in>/request', methods=['GET'])
+@app.route('/api/v1/users/<logged_in>/requests', methods=['GET'])
 def logged_in_user_get_request(logged_in):
     if logged_in:
         request = [request for request in session if request['email']==logged_in]
         return jsonify({'request':request})
     return jsonify({'request':'no requests'})    
 
-
-
+@app.route('/api/v1/users/<logged_in>/requests/<int:request_id>', methods=['GET'])
+def loggedin_user_get_request_id(logged_in,request_id):
+    if logged_in:
+        request = [request for request in session if request['id']==request_id
+                    and request['email']==logged_in
+                    ]
+        if len(request) == 0:
+            abort(404)
+        return jsonify({'request':request[0]})            
