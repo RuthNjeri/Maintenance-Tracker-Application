@@ -3,7 +3,7 @@
 
 
 from flask import Flask,request,jsonify,abort
-from flask import make_response
+from flask import make_response,render_template
 from . import app
 
 # """
@@ -39,7 +39,7 @@ logged_in = ""
 
 @app.route('/')
 def hello():
-    return "hello"
+    return render_template("signUp.html")
 
 @app.route('/api/v1/requests/<int:request_id>', methods=['GET'])
 def get_request(request_id):

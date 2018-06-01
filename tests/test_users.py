@@ -29,13 +29,13 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
 
     def test_user_signin(self):
         """
-        Test if user is logged in successfully through the endpoint
+        Test if user with wrong credentials is logged in unsuccessfully through the endpoint
         """ 
         resource = self.client().post('/api/v1/users/login',data=json.dumps({'id':3,
                                                                             'email':'hhh',
                                                                             'password':'hhh'})
                                         ,content_type='application/json')
-        self.assertEqual(resource.status_code,200)
+        self.assertEqual(resource.status_code,400)
 
 
 
