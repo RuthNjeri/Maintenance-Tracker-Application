@@ -23,30 +23,6 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
                         
                         }
         self.request_empty ={} 
-              
-        self.register_user = {
-                              'id': 1,  
-                              'email': 'jan@gmail.com',
-                              'password':'1234'  
-        
-                             }                
-
-    def test_user_signup(self):
-        """
-        Test if user is created successfully through the endpoint
-        """                       
-        resource = self.client().post('/maintenanceapp/api/v1/users/',data=json.dumps(self.register_user)
-                                       ,content_type='application/json')
-        self.assertEqual(resource.status_code,201)
-
-    def test_user_signin(self):
-        """
-        Test if user is logged in successfully through the endpoint
-        """                       
-        resource = self.client().post('/maintenanceapp/api/v1/users/login',data=json.dumps(self.register_user)
-                                        ,content_type='application/json')
-        self.assertEqual(resource.status_code,200)
-  
 
     def test_create_request(self):
         """

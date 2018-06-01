@@ -52,27 +52,17 @@ def request_not_found(error):
 def create_request():   
         if not request.json or not 'title' in request.json:
             abort(400)
-        if len(requests)==0:    
-            app_request = {
+        len(requests)==0   
+        app_request = {
 
-                        'id': request.json['id']+1,
+                        'id': len(requests)+1,
                         'title': request.json['title'],
                         'description': request.json['description'],
                         'type':request.json['type']
             
                         }
-            requests.append(app_request)
-        else:   
-            app_request = {
-
-                    'id': requests[-1]['id'] + 1,
-                    'title': request.json['title'],
-                    'description': request.json['description'],
-                    'type':request.json['type']
-        
-                    }   
+        requests.append(app_request)
                         
-            requests.append(app_request)
 
         return jsonify({'app_request':app_request}),201     
 
@@ -102,29 +92,17 @@ def delete_task(request_id):
 
 @app.route('/maintenanceapp/api/v1/users/', methods=['POST'])
 def create_user():
-    if len(users)==0:
+    len(users)==0
         
-            app_request = {
+    app_request = {
 
-                        'id': request.json['id']+1,
-                        'email': request.json['email'],
-                        'password': request.json['password'],
+                    'id': len(users)+1,
+                    'email': request.json['email'],
+                    'password': request.json['password'],
 
             
                         }
-            requests.append(app_request)
-    else:
-
-            app_request = {
-
-                    'id': users[-1]['id'] + 1,
-                    'title': request.json['email'],
-                    'password': request.json['password'],
-
-        
-                    }   
-                        
-            requests.append(app_request)
+    requests.append(app_request)
 
     return jsonify({'app_request':app_request}),201     
 
