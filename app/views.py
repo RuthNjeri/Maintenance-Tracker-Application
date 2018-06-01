@@ -135,7 +135,6 @@ def logged_in_user_create_request(logged_in):
             
                         }
         session.append(app_request)
-        print("sess_login",session)
         return jsonify({'Request':"Created"}),201  
 
 @app.route('/api/v1/users/<logged_in>/requests/<int:request_id>', methods=['GET'])
