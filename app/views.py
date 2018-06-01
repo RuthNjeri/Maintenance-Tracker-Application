@@ -34,19 +34,12 @@ from . import app
 
 requests = []
 users = []
-logged_in_user = ""
 session = []
+logged_in = ""
 
 @app.route('/')
 def hello():
     return "hello"
-
-@app.route('/api/v1/requests', methods=['GET'])
-def get_requests():
-    if len(requests) == 0:
-            abort(404)
-
-    return jsonify({'requests':requests})
 
 @app.route('/api/v1/requests/<int:request_id>', methods=['GET'])
 def get_request(request_id):
@@ -122,9 +115,12 @@ def login_user():
 
     for u in users:
         if u['email'] == email and u['password'] == password:
+            global logged_in
             logged_in = u['email']
+            print('login',logged_in)
             return jsonify({'logged_in': True}) 
     return jsonify({'logged_in': False}) 
+
     """logged in user create request
     """
 @app.route('/api/v1/users/<logged_in>/request', methods=['POST'])    
@@ -139,14 +135,8 @@ def logged_in_user_create_request(logged_in):
             
                         }
         session.append(app_request)
-        return jsonify({'Request':"Created"}),201
-
-@app.route('/api/v1/users/<logged_in>/requests', methods=['GET'])
-def logged_in_user_get_request(logged_in):
-    if logged_in:
-        request = [request for request in session if request['email']==logged_in]
-        return jsonify({'request':request})
-    return jsonify({'request':'no requests'})    
+        print("sess_login",session)
+        return jsonify({'Request':"Created"}),201  
 
 @app.route('/api/v1/users/<logged_in>/requests/<int:request_id>', methods=['GET'])
 def loggedin_user_get_request_id(logged_in,request_id):
@@ -157,3 +147,12 @@ def loggedin_user_get_request_id(logged_in,request_id):
         if len(request) == 0:
             abort(404)
         return jsonify({'request':request[0]})            
+
+@app.route('/api/v1/requests/', methods=['GET'])
+def logged_in_user_get_request():
+    if logged_in:
+        print('sess',session)
+        print(logged_in)
+        request = [request for request in session if request['email']==logged_in]
+        return jsonify({'request':request})
+    return jsonify({'request':'no requests'})          

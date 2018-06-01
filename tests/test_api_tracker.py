@@ -43,7 +43,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
                                          ,content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code,201)
-        resource = self.client().get('/api/v1/requests')
+        resource = self.client().get('/api/v1/requests/')
         self.assertEqual(resource.status_code,200)
      
 
