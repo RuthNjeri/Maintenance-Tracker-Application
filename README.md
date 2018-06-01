@@ -1,4 +1,4 @@
-# Maintenance-Tracker-Application  [![Build Status](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application.svg?branch=master)](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application)
+# Maintenance-Tracker-Application  [![Build Status](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application.svg?branch=master)](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application)[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg?branch=master)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application?branch=master)
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
 ## API ENDPOINTS ##
