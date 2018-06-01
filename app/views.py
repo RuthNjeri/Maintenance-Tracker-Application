@@ -118,8 +118,9 @@ def login_user():
             global logged_in
             logged_in = u['email']
             print('login',logged_in)
-            return jsonify({'logged_in': True}) 
-    return jsonify({'logged_in': False}) 
+            return jsonify({'logged_in': True}),200 
+    return jsonify({'logged_in': False}),400
+
 
     """logged in user create request
     """
