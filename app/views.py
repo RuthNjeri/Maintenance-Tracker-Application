@@ -59,28 +59,16 @@ def request_not_found(error):
 @app.route('/api/v1/requests', methods=['POST'])
 def create_request():   
         if not request.json or not 'title' in request.json:
-            abort(400)
-        if len(requests)==0:    
-            app_request = {
+            abort(400)   
+        app_request = {
 
-                        'id': request.json['id']+1,
+                        'id': len(requests)+1,
                         'title': request.json['title'],
                         'description': request.json['description'],
                         'type':request.json['type']
             
                         }
-            requests.append(app_request)
-        else:   
-            app_request = {
-
-                    'id': requests[-1]['id'] + 1,
-                    'title': request.json['title'],
-                    'description': request.json['description'],
-                    'type':request.json['type']
-        
-                    }   
-                        
-            requests.append(app_request)
+        requests.append(app_request)
 
         return jsonify({'app_request':app_request}),201     
 
