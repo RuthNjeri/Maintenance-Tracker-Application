@@ -2,6 +2,8 @@
 
 import os
 
+base_dir = os.path.abspath(os.path.dirname(__file__))
+
 class Config(object):
     """Base config class"""
     DEBUG = False
@@ -27,12 +29,7 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
 
-app_config = {
-            'development':DevConfig,
-            'testing':TestConfig,
-            'staging':StagingConfig,
-            'production':ProductionConfig,
-            }            
+         
 
 
 

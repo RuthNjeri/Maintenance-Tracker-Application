@@ -4,7 +4,8 @@
 
 from flask import Flask,request,jsonify,abort
 from flask import make_response
-from app   import app
+from . import app
+
 # """
 #             Sample of requests
 #             {
@@ -28,6 +29,9 @@ from app   import app
 #             'type': 'repair'
 #             }
 #             """
+
+
+
 requests = []
 users = []
 
@@ -138,5 +142,4 @@ def login_user():
         if users[u]['email'] == email and users[u]['password'] == password:
             return jsonify({'logged_in': True}) 
     return jsonify({'logged_in': False})         
-
 
