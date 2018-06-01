@@ -20,8 +20,13 @@
                 <a href="#faq">FAQ</a>
             </div>
         </div> 
-        <div class="user-request-table">
-            <input type="text" placeholder="Search..">
+        <div class="myDropdown">
+            <input type="text" placeholder="Search.." id="myInput">
+            <a href="#Title">ID</a>
+            <a href="#Description">Title</a>
+            <a href="#ID">Type</a>
+        </div> 
+        <div class="user-request-table">  
             <h3>All Requests</h3>
             <table>
                 <tr>
@@ -56,10 +61,11 @@
                         <td>Disapproved</td>
                         <td>The accountants request that you do it at the begining of next month</td>
                 </tr>
-
-
             </table>
         </div>
+        <a href="js:prevPage()" id="btn_prev">Prev</a>
+        <a href="js:nextPage()" id="btn_next">Next</a>
+        page: <span id="page"></span>
         <div class="footer"> 
             <p id="date-footer"></p>
         </div>  

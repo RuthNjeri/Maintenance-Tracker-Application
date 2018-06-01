@@ -42,6 +42,7 @@ font-family:'Montserrat';
 
 }
 
+
 .header a.active {
     color: white;
 }
@@ -55,6 +56,20 @@ font-family:'Montserrat';
 .header-right {
     float: right; 
 
+}
+
+.myDropdown a{
+    color: grey;
+    text-decoration: none;    
+}
+
+.myDropdown a.active {
+    color: black;
+}
+
+.myDropdown a:hover {
+    color: black;
+    text-decoration: underline;
 }
 
 .footer {
