@@ -2,10 +2,13 @@
 __pycache__/
 *.py[cod]
 .pytest_cache
+<<<<<<< HEAD
 *.pc
 *.pyc
 *.pyo
 __pycache__
+=======
+>>>>>>> 2ddb97ca05298ac7af2558e95407c1ec86a0dfb5
 
 # C extensions
 *.so

@@ -9,6 +9,11 @@
   "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_read_request_with_non_existing_id",
   "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_update_on_request_not_existing",
   "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_update_requests",
+<<<<<<< HEAD
   "tests/test_users.py::MaintenanceTrackerApiTest::test_user_signin",
   "tests/test_users.py::MaintenanceTrackerApiTest::test_user_signup"
+=======
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_user_signin",
+  "tests/test_api_tracker.py::MaintenanceTrackerApiTest::test_user_signup"
+>>>>>>> 2ddb97ca05298ac7af2558e95407c1ec86a0dfb5
 ]
