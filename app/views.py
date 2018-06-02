@@ -32,25 +32,15 @@ from . import app
 
 
 
-requests = []
+
 users = []
-logged_in_user = ""
+session = []
+logged_in = ""
+requests =[]
 
 @app.route('/')
 def hello():
     return "hello"
-
-@app.route('/api/v1/requests', methods=['GET'])
-def get_requests():
-
-    return jsonify({'requests':requests})
-
-@app.route('/api/v1/requests/<int:request_id>', methods=['GET'])
-def get_request(request_id):
-        request = [request for request in requests if request['id']==request_id]
-        if len(request) == 0:
-            abort(404)
-        return jsonify({'request':request[0]})
 
 @app.errorhandler(404)
 def request_not_found(error):
@@ -59,53 +49,19 @@ def request_not_found(error):
 @app.route('/api/v1/requests', methods=['POST'])
 def create_request():   
         if not request.json or not 'title' in request.json:
-            abort(400)
-        if len(requests)==0:    
-            app_request = {
+            abort(400)   
+        app_request = {
 
-                        'id': request.json['id']+1,
+                        'id': len(requests)+1,
+                        'email':request.json['email'],
                         'title': request.json['title'],
                         'description': request.json['description'],
                         'type':request.json['type']
             
                         }
-            requests.append(app_request)
-        else:   
-            app_request = {
-
-                    'id': requests[-1]['id'] + 1,
-                    'title': request.json['title'],
-                    'description': request.json['description'],
-                    'type':request.json['type']
-        
-                    }   
-                        
-            requests.append(app_request)
+        requests.append(app_request)
 
         return jsonify({'app_request':app_request}),201     
-
-
-@app.route('/api/v1/requests/<int:request_id>', methods=['PUT'])
-def update_request(request_id):
-        update_request = [request for request in requests if request['id']==request_id]
-        if len(update_request) == 0:
-            abort(404)
-
-        if not request.json:
-            abort(400)  
-
-        update_request[0]['title'] = request.json.get('title', update_request[0]['title'])
-        update_request[0]['description'] = request.json.get('description', update_request[0]['description'])
-        update_request[0]['type'] = request.json.get('type', update_request[0]['type'])
-        return jsonify({'update_request': update_request[0]})   
-
-@app.route('/api/v1/requests/<int:request_id>', methods=['DELETE'])
-def delete_task(request_id):
-        request = [request for request in requests if request['id']==request_id]        
-        if len(request) == 0:
-            abort(404)
-        request.remove(request[0])
-        return jsonify({'message': 'Successfully deleted' })    
 
 
 @app.route('/api/v1/users/', methods=['POST'])
@@ -121,8 +77,6 @@ def create_user():
             
                         }
     users.append(app_request)
-
-
     return jsonify({'app_request':app_request}),201     
 
 @app.route('/api/v1/users/login', methods=['POST'])
@@ -133,6 +87,68 @@ def login_user():
 
     for u in users:
         if u['email'] == email and u['password'] == password:
-            logged_in_user = email
-            return jsonify({'logged_in': True}) 
-    return jsonify({'logged_in': False})         
+            global logged_in
+            logged_in = u['email']
+            return jsonify({'logged_in': True}),200
+    return jsonify({'logged_in': False}),400 
+
+    """logged in user create request
+    """
+@app.route('/api/v1/users/request', methods=['POST'])    
+def logged_in_user_create_request():
+    if logged_in:
+        app_request = {
+                        'email':logged_in,
+                        'id': len(session)+1,
+                        'title': request.json['title'],
+                        'description': request.json['description'],
+                        'type':request.json['type']
+            
+                        }
+        session.append(app_request)
+        return jsonify({'Request':"Created"}),201 
+    return jsonify({'request':'not created'}),404
+
+@app.route('/api/v1/users/requests/<int:request_id>', methods=['GET'])
+def loggedin_user_get_request_id(request_id):
+    if logged_in:
+        request = [request for request in session if request['id']==request_id
+                    and request['email']==logged_in
+                    ]
+        if len(request) == 0:
+            abort(404)
+        return jsonify({'request':request[0]}),200
+    return jsonify({'request':'not found'}),404                
+
+@app.route('/api/v1/requests/', methods=['GET'])
+def logged_in_user_get_request():
+    if logged_in:
+        request = [request for request in session if request['email']==logged_in]
+        return jsonify({'request':request}),200
+    return jsonify({'request':'no requests'}),404
+
+
+@app.route('/api/v1/requests/<int:request_id>', methods=['PUT'])
+def update_request(request_id):
+    if logged_in:
+        update_request = [request for request in session if request['id']==request_id]
+        if len(update_request) == 0:
+            abort(404)
+
+        if not request.json:
+            abort(400)  
+
+        update_request[0]['title'] = request.json.get('title', update_request[0]['title'])
+        update_request[0]['description'] = request.json.get('description', update_request[0]['description'])
+        update_request[0]['type'] = request.json.get('type', update_request[0]['type'])
+        return jsonify({'update_request': update_request[0]})   
+    return jsonify({'request':'not found'}),404    
+
+@app.route('/api/v1/requests/<int:request_id>', methods=['DELETE'])
+def delete_task(request_id):
+    if logged_in:
+        request = [request for request in session if request['id']==request_id]        
+        if len(request) == 0:
+            abort(404)
+        session.remove(request[0])
+        return jsonify({'message': 'Successfully deleted' })      

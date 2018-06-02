@@ -17,6 +17,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         self.request = {
 
                         'id': 1,
+                        'email':'y@gmailcom',
                         'title':'Computer Shut down',
                         'description':'The computer beeped three times then shuts down',
                         'type':'maintenance'  
@@ -34,17 +35,12 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         self.assertEqual(resource.status_code,201)
         self.assertIn(data['app_request']['title'],self.request['title'])
 
-    def test_read_request(self):
+    def test_read_request_not_signed_in(self):
         """
-        Test that a user can read all their requests or 
-        get back an empty dictionary if they do not have requests
+        Test that a user cannot read all their requests if not signed in
         """
-        resource = self.client().post('/api/v1/requests', data=json.dumps(self.request)
-                                         ,content_type='application/json')
-        data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code,201)
-        resource = self.client().get('/api/v1/requests')
-        self.assertEqual(resource.status_code,200)
+        resource = self.client().get('/api/v1/requests/')
+        self.assertEqual(resource.status_code,404)
      
 
 
@@ -56,31 +52,13 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
                                           ,content_type='application/json')
         self.assertEqual(resource.status_code,400)
 
- 
-
-    def test_read_request_with_id(self):
-        """
-        Test that a user request is returned
-        when the request ID is specified.
-        This test runs independently
-        """    
-        
-        resource = self.client().post('/api/v1/requests', data=json.dumps(self.request)
-                                          ,content_type='application/json')
-        self.assertEqual(resource.status_code,201)
-        data = json.loads(resource.data.decode())
-        resource = self.client().get('/api/v1/requests/{}'.format(data['app_request']['id']))
-        data = json.loads(resource.data.decode())
-        self.assertEqual(resource.status_code,200)
-        self.assertIn(data['request']['title'],self.request['title'])
-
 
     def test_no_request_with_id(self):
         """
         Test that a user request is not returned
         when the request ID is specified
         """ 
-        resource = self.client().get('/api/v1/requests/100')
+        resource = self.client().get('/api/v1/users/requests/100')
         self.assertEqual(resource.status_code,404)
 
     def test_read_request_with_non_existing_id(self):
@@ -88,7 +66,7 @@ class MaintenanceTrackerApiTest(unittest.TestCase):
         Test that a user request is returned
         when the request ID is specified
         """    
-        resource = self.client().get('/api/v1/requests/100')
+        resource = self.client().get('/api/v1/users/requests/100')
         self.assertEqual(resource.status_code,404)
 
      

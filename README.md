@@ -1,14 +1,14 @@
-# Maintenance-Tracker-Application #
+# Maintenance-Tracker-Application  [![Build Status](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application.svg?branch=master)](https://travis-ci.org/RuthNjeri/Maintenance-Tracker-Application)[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg?branch=master)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application?branch=master)
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
 ## API ENDPOINTS ##
-| HTTP Method   | URI                                                                 | Action                    |
-| ------------- |:-------------------------------------------------------------------:|-----------------------:   |
-| GET	          |http://[hostname]/maintenanceTrackerApp/api/v1/requests	             |Retrieve list of requests  |  
-| GET           |http://[hostname]/maintenanceTrackerApp/api/v1/requests/[request_id] |Retrieve a request         |  
-| POST          |http://[hostname]/maintenanceTrackerApp/api/v1/requests              |Create a new request       |   
-| PUT           |http://[hostname]/maintenanceTrackerApp/api/v1/requests/[request_id] |Update an existing request |       
-| DELETE        |http://[hostname]/maintenanceTrackerApp/api/v1/requests/[request_id] |Delete an existing request | 
+| HTTP Method   | URI                          |                           |
+| ------------- |:--------------------------------------------------------:|
+| GET	        |/api/v1/requests	           |Retrieve list of requests  |  
+| GET           |/api/v1/requests/[request_id] |Retrieve a request         |  
+| POST          |/api/v1/requests              |Create a new request       |   
+| PUT           |/api/v1/requests/[request_id] |Update an existing request |       
+| DELETE        |/api/v1/requests/[request_id] |Delete an existing request | 
 
 ## Testing the Endpoints
 Navigate inside the Maintenance-Tracker-Application folder. `cd app` folder. open the `__init__.py`. Test the endpoints using [Postman](https://www.getpostman.com/)

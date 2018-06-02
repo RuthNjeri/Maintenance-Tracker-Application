@@ -4,25 +4,12 @@
 import os
 from flask import Flask
 from . import config
-# from config.config import app_config
 
 
 
 
-# #Initialize application
-# def create_app(config_name):
-#     app = Flask(__name__)
-#     app.config.from_object(app_config[config_name])
 
-
-#     return app
-
-   
-
-# app = create_app('development')
-
-
-app = Flask(__name__, static_folder=None)
+app = Flask(__name__)
 
 # app configuration
 app_settings = os.getenv(
