@@ -2,9 +2,9 @@
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
 ## API ENDPOINTS ##
-| HTTP Method   | URI                          |                           |
-| ------------- |:--------------------------------------------------------:|
-| GET	        |/api/v1/requests	           |Retrieve list of requests  |  
+| HTTP Method   | URI                          | Action                    |
+| ------------- |:----------------------------:|--------------------------:|
+| GET	          |/api/v1/requests	             |Retrieve list of requests  |  
 | GET           |/api/v1/requests/[request_id] |Retrieve a request         |  
 | POST          |/api/v1/requests              |Create a new request       |   
 | PUT           |/api/v1/requests/[request_id] |Update an existing request |       
@@ -14,11 +14,14 @@ Provides users with the ability to reach out to operations or repairs department
 Navigate inside the Maintenance-Tracker-Application folder. `cd app` folder. open the `__init__.py`. Test the endpoints using [Postman](https://www.getpostman.com/)
 
 ## Screenshots
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527702370/NewnewPost_oyur5r.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/DeleteRequest_pmwq7u.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Get_Requests_l3o8pu.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/get_request_with_id_kb2iwv.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527685086/Put_request_gzdtxj.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927992/Specificreq_txelnk.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927992/newrequestcreated_enaeaq.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/Login2_nkcuye.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/GetNew_specific_user_request_zst783.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/PutReq_qlalpa.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/DeleteReq_rceurt.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/User1_enw9uw.png)
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927992/user2_g1zzgo.png)
 
 ## UI Tasks ##
 
