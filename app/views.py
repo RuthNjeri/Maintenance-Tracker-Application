@@ -3,7 +3,7 @@
 
 
 from flask import Flask,request,jsonify,abort
-from flask import make_response,render_template
+from flask import make_response
 from . import app
 
 # """
@@ -39,7 +39,7 @@ logged_in = ""
 
 @app.route('/')
 def hello():
-    return render_template("signUp.html")
+    return "hello"
 
 @app.route('/api/v1/requests/<int:request_id>', methods=['GET'])
 def get_request(request_id):
@@ -117,15 +117,13 @@ def login_user():
         if u['email'] == email and u['password'] == password:
             global logged_in
             logged_in = u['email']
-            print('login',logged_in)
-            return jsonify({'logged_in': True}),200 
-    return jsonify({'logged_in': False}),400
-
+            return jsonify({'logged_in': True}),200
+    return jsonify({'logged_in': False}),400 
 
     """logged in user create request
     """
-@app.route('/api/v1/users/<logged_in>/request', methods=['POST'])    
-def logged_in_user_create_request(logged_in):
+@app.route('/api/v1/users/request', methods=['POST'])    
+def logged_in_user_create_request():
     if logged_in:
         app_request = {
                         'email':logged_in,
@@ -137,9 +135,10 @@ def logged_in_user_create_request(logged_in):
                         }
         session.append(app_request)
         return jsonify({'Request':"Created"}),201  
+        return jsonify({'request':'not created'})
 
-@app.route('/api/v1/users/<logged_in>/requests/<int:request_id>', methods=['GET'])
-def loggedin_user_get_request_id(logged_in,request_id):
+@app.route('/api/v1/users/requests/<int:request_id>', methods=['GET'])
+def loggedin_user_get_request_id(request_id):
     if logged_in:
         request = [request for request in session if request['id']==request_id
                     and request['email']==logged_in
@@ -151,8 +150,6 @@ def loggedin_user_get_request_id(logged_in,request_id):
 @app.route('/api/v1/requests/', methods=['GET'])
 def logged_in_user_get_request():
     if logged_in:
-        print('sess',session)
-        print(logged_in)
         request = [request for request in session if request['email']==logged_in]
         return jsonify({'request':request})
     return jsonify({'request':'no requests'})          
