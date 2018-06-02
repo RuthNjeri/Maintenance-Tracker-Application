@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.com/RuthNjeri/Maintenance-Tracker-Application.svg?branch=develop)](https://travis-ci.com/RuthNjeri/Maintenance-Tracker-Application)
 
 
-[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg?branch=develop)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application)
 
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
