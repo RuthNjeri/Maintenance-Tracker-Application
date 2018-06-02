@@ -3,6 +3,7 @@ atomicwrites==1.1.5
 attrs==18.1.0
 click==6.7
 colorama==0.3.9
+coverage==4.5.1
 Flask==1.0.2
 Flask-API==1.0
 gunicorn==19.8.1
@@ -17,6 +18,7 @@ pluggy==0.6.0
 py==1.5.3
 pylint==1.9.1
 pytest==3.6.0
+pytest-cov==2.5.1
 six==1.11.0
 Werkzeug==0.14.1
 wrapt==1.10.11
