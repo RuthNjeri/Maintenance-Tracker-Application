@@ -12,7 +12,8 @@ script:
   - pytest
 
 script:
-  - nosetests --with-coverage  --cover-package=app && coverage report
+  - coverage run -m pytest
+
 
 
 

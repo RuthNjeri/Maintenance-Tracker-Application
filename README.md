@@ -5,7 +5,7 @@
 
 ![issues open](https://img.shields.io/github/issues/RuthNjeri/Maintenance-Tracker-Application.svg)
 
-[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg?branch=develop)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application?branch=develop)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d144cfc546fdaac3ff35/test_coverage)](https://codeclimate.com/github/RuthNjeri/Maintenance-Tracker-Application/test_coverage)
 
 Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
 
