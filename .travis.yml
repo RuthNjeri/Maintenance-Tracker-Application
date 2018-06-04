@@ -1,14 +1,31 @@
+dist: trusty
+
 language: python
 python:
   - "3.6"
+
 # command to install dependencies
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+
 branches:
     only:
         - develop
+
 install:
   - pip install -r requirements.txt
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
+
+services:
+  - redis-server
+# for codecoverage on codeclimate.com
+env:
+  global:
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    - CODECLIMATE_REPO_TOKEN=[token]
+    - CC_TEST_REPORTER_ID=a96fc4c192b03ca9f29d9c57dbc9e02d3f6484459b7f4a9cdfe718651b29f203
+
+
 # command to run tests
 script:
   - pytest
@@ -16,13 +33,6 @@ script:
 script:
   - coverage run -m pytest
 
-
-  # for codecoverage on codeclimate.com
-env:
-  global:
-    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
-    - CODECLIMATE_REPO_TOKEN=[token]
-    - CC_TEST_REPORTER_ID=a96fc4c192b03ca9f29d9c57dbc9e02d3f6484459b7f4a9cdfe718651b29f203
 
 
 
