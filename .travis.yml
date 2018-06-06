@@ -22,7 +22,7 @@ script:
 
 script:
   - coverage run -m pytest
-  - py.test --cov=app tests/
+  - py.test --cov=app project/tests/
 
 
 
