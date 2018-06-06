@@ -1,100 +1,41 @@
- #app/views.py
+#  #app/requests/views.py
+
+#imports
+from flask import Flask,request,jsonify,abort,make_response,Blueprint
 
 
+#configure blueprint
+requests = Blueprint('requests',__name__,template_folder='templates')
 
-from flask import Flask,request,jsonify,abort
-from flask import make_response
-from . import app
-
-# """
-#             Sample of requests
-#             {
-#             'id': 1,
-#             'title': 'Computer will not start',
-#             'description': 'The computer beeps three times then goes off',
-#             'type': 'repair'
-#             },
-            
-#             {
-#             'id': 2,
-#             'title': 'Access to the data centre',
-#             'description': 'There are updates that need to be installed on the servers',
-#             'type': 'maintenance'
-#             },
-
-#             {
-#             'id': 3,
-#             'title': 'Computer keyboard not working',
-#             'description': 'I acidentally poured coffee on my keyboard',
-#             'type': 'repair'
-#             }
-#             """
-
-
-
-
-users = []
+users_list = []
 session = []
 logged_in = ""
-requests =[]
+requests_list =[]
 
-@app.route('/')
-def hello():
-    return "hello"
-
-@app.errorhandler(404)
+@requests.errorhandler(404)
 def request_not_found(error):
         return make_response(jsonify({'error':'Not found'}),404)  
 
-@app.route('/api/v1/requests', methods=['POST'])
+@requests.route('/api/v1/requests', methods=['POST'])
 def create_request():   
         if not request.json or not 'title' in request.json:
             abort(400)   
         app_request = {
 
-                        'id': len(requests)+1,
+                        'id': len(requests_list)+1,
                         'email':request.json['email'],
                         'title': request.json['title'],
                         'description': request.json['description'],
                         'type':request.json['type']
             
                         }
-        requests.append(app_request)
+        requests_list.append(app_request)
 
-        return jsonify({'app_request':app_request}),201     
+        return jsonify({'app_request':app_request}),201
 
-
-@app.route('/api/v1/users/', methods=['POST'])
-def create_user():
-   
-        
-    app_request = {
-
-                        'id': len(users)+1,
-                        'email': request.json['email'],
-                        'password': request.json['password'],
-
-            
-                        }
-    users.append(app_request)
-    return jsonify({'app_request':app_request}),201     
-
-@app.route('/api/v1/users/login', methods=['POST'])
-def login_user():
-
-    email = request.json['email']
-    password = request.json['password']
-
-    for u in users:
-        if u['email'] == email and u['password'] == password:
-            global logged_in
-            logged_in = u['email']
-            return jsonify({'logged_in': True}),200
-    return jsonify({'logged_in': False}),400 
-
-    """logged in user create request
+"""logged in user create request
     """
-@app.route('/api/v1/users/request', methods=['POST'])    
+@requests.route('/api/v1/users/request', methods=['POST'])    
 def logged_in_user_create_request():
     if logged_in:
         app_request = {
@@ -109,18 +50,18 @@ def logged_in_user_create_request():
         return jsonify({'Request':"Created"}),201 
     return jsonify({'request':'not created'}),404
 
-@app.route('/api/v1/users/requests/<int:request_id>', methods=['GET'])
+@requests.route('/api/v1/users/requests/<int:request_id>', methods=['GET'])
 def loggedin_user_get_request_id(request_id):
     if logged_in:
         request = [request for request in session if request['id']==request_id
                     and request['email']==logged_in
                     ]
-        if len(request) == 0:
+        if len(requests_list) == 0:
             abort(404)
         return jsonify({'request':request[0]}),200
     return jsonify({'request':'not found'}),404                
 
-@app.route('/api/v1/requests/', methods=['GET'])
+@requests.route('/api/v1/requests/', methods=['GET'])
 def logged_in_user_get_request():
     if logged_in:
         request = [request for request in session if request['email']==logged_in]
@@ -128,7 +69,7 @@ def logged_in_user_get_request():
     return jsonify({'request':'no requests'}),404
 
 
-@app.route('/api/v1/requests/<int:request_id>', methods=['PUT'])
+@requests.route('/api/v1/requests/<int:request_id>', methods=['PUT'])
 def update_request(request_id):
     if logged_in:
         update_request = [request for request in session if request['id']==request_id]
@@ -144,7 +85,7 @@ def update_request(request_id):
         return jsonify({'update_request': update_request[0]})   
     return jsonify({'request':'not found'}),404    
 
-@app.route('/api/v1/requests/<int:request_id>', methods=['DELETE'])
+@requests.route('/api/v1/requests/<int:request_id>', methods=['DELETE'])
 def delete_task(request_id):
     if logged_in:
         request = [request for request in session if request['id']==request_id]        
