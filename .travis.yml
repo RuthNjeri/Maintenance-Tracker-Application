@@ -21,7 +21,7 @@ script:
   - pytest
 
 script:
-  - sql -c 'create database maintenanceapp;' -U postgres
+  - psql -c 'create database maintenanceapp;' -U postgres
   - coverage run -m pytest
   - py.test --cov=app project/tests/
 
