@@ -1,9 +1,18 @@
 #project/config file
 
+
 import os
-import os
+import psycopg2
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
+
+try:
+    #connect to database
+    conn = psycopg2.connect("dbname=maintenanceapp host=localhost user=postgres password=1234")
+    
+except:
+    print("database not connected")
+
 
 
 
