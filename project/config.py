@@ -1,4 +1,4 @@
-#config/config file
+#project/config file
 
 import os
 
@@ -8,7 +8,7 @@ class Config(object):
     """Base config class"""
     DEBUG = False
     CSRF_ENABLED = True
-    SECRETE = os.getenv('SECRET')
+    SECRET = os.getenv('SECRET')
 
 
 class DevConfig(Config):
