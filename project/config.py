@@ -20,7 +20,7 @@ class Config(object):
     """Base config class"""
     DEBUG = False
     CSRF_ENABLED = True
-    SECRET = os.getenv('SECRET')
+    SECRET = os.getenv('SECRET', "\x00\x8e6b\x99\x8d\x9a\xea\xea\x8a\x0e\x91\xa8'U\xe8\xdb N\x8d\xd4\xeeDu")
 
 
 class DevConfig(Config):

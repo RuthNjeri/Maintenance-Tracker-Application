@@ -1,1 +1,8 @@
-[]
+[
+  "project/tests/test_users.py::Test_users::test_create_users",
+  "project/tests/test_users.py::Test_users::test_create_users_who_already_exists",
+  "project/tests/test_users.py::Test_users::test_jwt_authentication",
+  "project/tests/test_users.py::Test_users::test_log_in",
+  "project/tests/test_users.py::Test_users::test_log_in_with_wrong_email",
+  "project/tests/test_users.py::Test_users::test_log_in_with_wrong_password"
+]

@@ -5,8 +5,8 @@ import os
 from flask import Flask
 from . import config
 #blueprints
-from .requests.views import requests
-from .users.views import users
+from project.requests.views import requests
+from project.users.views import users
 
 
 
@@ -15,8 +15,8 @@ from .users.views import users
 app = Flask(__name__)
 
 #register blueprints
-app.register_blueprint(users)
-app.register_blueprint(requests)
+app.register_blueprint(users, url_prefix='/api/v2')
+app.register_blueprint(requests, url_prefix='/api/v2')
 
 # app configuration
 app_settings = os.getenv(

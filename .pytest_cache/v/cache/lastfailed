@@ -4,6 +4,7 @@
   "project/tests/test_users.py::MaintenanceTrackerApiTest::test_user_not_signup_can_signin": true,
   "project/tests/test_users.py::MaintenanceTrackerApiTest::test_user_signup_signin": true,
   "project/tests/test_users.py::MaintenanceTrackerApiTest::test_user_signup_signin_wrong_credentials": true,
+  "project/tests/test_users.py::Test_jwt_authentication": true,
   "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_create_request": true,
   "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_delete_request": true,
   "tests/test_api-tracker.py::MaintenanceTrackerApiTest::test_read_empty_request": true,
