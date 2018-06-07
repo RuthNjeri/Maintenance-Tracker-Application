@@ -10,10 +10,13 @@ from project.config import conn, Config
 
 
 
+
 # configure blueprint
 users = Blueprint('users', __name__, template_folder='templates')
 
 cur = conn.cursor()
+
+
 
 def jwt_auth_encode(userid):
     # to generate the auth token
@@ -60,6 +63,10 @@ def create_user():
     password = form['password']
 
     try:
+        if email == "":
+            return jsonify({'response': 'email cannot be empty'})
+        if password == "":
+            return jsonify({'response': 'password cannot be empty'})
         cur.execute("SELECT * FROM users WHERE email=%s and password=%s;", (email, password,))
         user = cur.fetchone()
         print('user',user)
@@ -72,10 +79,10 @@ def create_user():
             conn.commit()
             return jsonify({'response': 'user created successfully'}),201
         else:
-            return jsonify({'response': 'user already exists'}),400
+            return jsonify({'response': 'user already exists'}),409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        return jsonify({'dberror': str(e)}),400
+        return jsonify({'Response':'please enter your email, firstname, lastname and password' }),400
 
 
 @users.route('/auth/login', methods=['POST'])
@@ -89,13 +96,13 @@ def login_user():
         cur.execute("SELECT * FROM users WHERE email=%s and password=%s;", (email, password,))
         id = cur.fetchone()
         token = jwt_auth_encode(id[0])
-        if token:
+        if token and email:
             response = {  'message':'login successfull'
                         , 'token': token.decode()
                         }
             return jsonify(response),200
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
         print('e',e)
-        return jsonify({'dberror': str(e)}),400
+        return jsonify({'Response': 'Please enter the correct user details'}),409
 
 

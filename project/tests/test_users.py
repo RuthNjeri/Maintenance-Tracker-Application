@@ -8,9 +8,12 @@ from project.users.views import jwt_auth_encode,decode_auth_token
 from project.config import conn, Config
 from project import app
 from project.users.views import users
+from migration import migration
+
 
 class Test_users(unittest.TestCase):
     def setUp(self):
+        migration()
         self.app = app
         # config_name="testing"
         self.client = self.app.test_client
@@ -19,13 +22,13 @@ class Test_users(unittest.TestCase):
         #create a user who is not an admin with role equal to 0 
         create_user_statement = """INSERT INTO
             users  (email,firstname,lastname,password,role)
-            VALUES ('%s','%s','%s','%s', %d)""" % ("a@gmail.com","Josh","Doe","1234",0)
+            VALUES ('%s','%s','%s','%s', %d)""" % ("b@gmail.com","Josh","Doe","1234",0)
         #open a cursor to perform database operations
         self.cur = conn.cursor()
         self.cur.execute(create_user_statement)
         #save it in the database
         conn.commit()
-        user_id_statement =("SELECT * FROM users WHERE email='a@gmail.com'")
+        user_id_statement =("SELECT * FROM users WHERE email='b@gmail.com'")
         self.cur.execute(user_id_statement)
         results = self.cur.fetchone()
         jwt_auth_token = jwt_auth_encode(results[0])
@@ -45,12 +48,20 @@ class Test_users(unittest.TestCase):
 
     def test_create_users_who_already_exists(self):
         resource = self.client().post('api/v2/auth/signup'
-                                ,data= json.dumps(dict (email = 'b@gmail.com'
-                                        , firstname = 'james'
+                                ,data= json.dumps(dict (email = 'sh@gmail.com'
+                                        , firstname = 'sasha'
                                         , lastname = 'doe'
                                         , password = '1234'
                                     )), content_type = 'application/json')
-        self.assertEqual(resource.status_code,400)
+        self.assertEqual(resource.status_code,201)
+
+        resource = self.client().post('api/v2/auth/signup'
+                                ,data= json.dumps(dict (email = 'sh@gmail.com'
+                                        , firstname = 'sasha'
+                                        , lastname = 'doe'
+                                        , password = '1234'
+                                    )), content_type = 'application/json')
+        self.assertEqual(resource.status_code,409)
 
 
     def test_log_in(self):
@@ -83,7 +94,7 @@ class Test_users(unittest.TestCase):
         resource_login =self.client().post('api/v2/auth/login',data=json.dumps(dict(email = "x@gmail.com"   
                                                                     ,password = "123"
                                                                     )),content_type='application/json')
-        self.assertEqual(resource_login.status_code,400)
+        self.assertEqual(resource_login.status_code,409)
 
 
     def test_log_in_with_wrong_email(self):
@@ -99,8 +110,7 @@ class Test_users(unittest.TestCase):
         resource_login =self.client().post('api/v2/auth/login',data=json.dumps(dict(email = "l@gmail.com"   
                                                                     ,password = "1234"
                                                                     )),content_type='application/json')
-        self.assertEqual(resource_login.status_code,400)
-
+        self.assertEqual(resource_login.status_code,409)
 
 
 
