@@ -1,57 +1,101 @@
- #project/users/views.py
+# project/users/views.py
 
-#imports
-from flask import Flask,request,jsonify,abort,make_response,Blueprint
+# imports
+import datetime
+import jwt
+import psycopg2
+from flask import Flask, request, jsonify, abort, make_response, Blueprint
+from project.config import conn, Config
 
 
-#configure blueprint
-users = Blueprint('users',__name__,template_folder='templates')
 
-users_list = []
-session = []
-logged_in = ""
-requests =[]
 
-#test if routes are working
+# configure blueprint
+users = Blueprint('users', __name__, template_folder='templates')
+
+cur = conn.cursor()
+
+def jwt_auth_encode(userid):
+    # to generate the auth token
+
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=10),
+            'iat': datetime.datetime.utcnow(),
+            'sub': userid
+        }
+        return jwt.encode(
+            payload,
+            Config.SECRET
+        )
+    except Exception as e:
+        raise e
+
+
+
+def decode_auth_token(auth_token):
+    # decode auth token
+    try:
+        payload = jwt.decode(auth_token,Config.SECRET)
+        return payload['sub']
+    except Exception as e:
+        return("Try logging in again", e)
+
 @users.route('/')
-def request():
-        return "hello" 
+def index():
+    return "hello"
 
 @users.errorhandler(404)
 def request_not_found(error):
-        return make_response(jsonify({'error':'Not found'}),404)  
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-
-@users.route('/api/v1/users/', methods=['POST'])
+@users.route('/auth/signup', methods=['POST'])
 def create_user():
-   
-        
-    app_request = {
+    form = request.get_json()
+    print('form', form)
+    email = form['email']
+    firstname = form['firstname']
+    lastname = form['lastname']
+    password = form['password']
 
-                        'id': len(users_list)+1,
-                        'email': request.json['email'],
-                        'password': request.json['password'],
+    try:
+        cur.execute("SELECT * FROM users WHERE email=%s and password=%s;", (email, password,))
+        user = cur.fetchone()
+        print('user',user)
 
-            
-                        }
-    users_list.append(app_request)
-    return jsonify({'app_request':app_request}),201     
+        if user is None:
+            create_user_statement = """INSERT INTO
+                users  (email, firstname, lastname, password, role)
+                VALUES ('%s','%s','%s','%s', %d)""" % (email, firstname, lastname, password, 0)
+            cur.execute(create_user_statement)
+            conn.commit()
+            return jsonify({'response': 'user created successfully'}),201
+        else:
+            return jsonify({'response': 'user already exists'}),400
 
-@users.route('/api/v1/users/login', methods=['POST'])
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'dberror': str(e)}),400
+
+
+@users.route('/auth/login', methods=['POST'])
 def login_user():
+    form = request.get_json()
+    email = form['email']
+    password = form['password']
 
-    email = request.json['email']
-    password = request.json['password']
 
-    for u in users_list:
-        if u['email'] == email and u['password'] == password:
-            global logged_in
-            logged_in = u['email']
-            return jsonify({'logged_in': True}),200
-    return jsonify({'logged_in': False}),400 
+    try:
+        cur.execute("SELECT * FROM users WHERE email=%s and password=%s;", (email, password,))
+        id = cur.fetchone()
+        token = jwt_auth_encode(id[0])
+        if token:
+            response = {  'message':'login successfull'
+                        , 'token': token.decode()
+                        }
+            return jsonify(response),200
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        print('e',e)
+        return jsonify({'dberror': str(e)}),400
 
-@users.route('/api/v1/users/logout')
-def logout_user():
-	pass
 
