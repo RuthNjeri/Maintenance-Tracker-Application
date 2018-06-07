@@ -10,6 +10,7 @@ try:
     #connect to database
     conn = psycopg2.connect("dbname=maintenanceapp host=localhost user=postgres password=1234")
     
+    
 except:
     print("database not connected")
 
