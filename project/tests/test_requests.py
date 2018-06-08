@@ -41,7 +41,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().post('/api/v2/users/requests'
                                             ,data = json.dumps(dict(title = "Computer cannot start"
                                                     ,description = "It beeps twice when powered"
@@ -127,7 +126,6 @@ class Test_requests(unittest.TestCase):
                                                                     ,password = "1234"
                                                                     )),content_type='application/json')
         data = json.loads(resource_login.data.decode())
-        print('data',data)
         token = data['token']
         decode = decode_auth_token(token)
         self.assertTrue(data['token'])
@@ -165,7 +163,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().post('/api/v2/users/requests'
                                             ,data = json.dumps(dict(title = "Computer cannot start"
                                                     ,description = "It beeps twice when powered"
@@ -190,7 +187,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().get('/api/v2/requests/',headers = headers)
         #there are no requests in the database
         self.assertEqual(request_resource.status_code,409)
@@ -214,7 +210,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().post('/api/v2/users/requests'
                                             ,data = json.dumps(dict(title = "Computer cannot start"
                                                     ,description = "It beeps twice when powered"
@@ -245,7 +240,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().post('/api/v2/users/requests'
                                             ,data = json.dumps(dict(title = "Computer cannot start"
                                                     ,description = "It beeps twice when powered"
@@ -267,7 +261,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().post('/api/v2/users/requests'
                                             ,data = json.dumps(dict(title = "Computer cannot start"
                                                     ,description = "It beeps twice when powered"
@@ -289,7 +282,6 @@ class Test_requests(unittest.TestCase):
         self.assertTrue(data['token'])
         self.assertEqual(resource_login.status_code,200)
         headers = {'content-type': 'application/json', 'token':token}
-        print('headers',headers)
         request_resource = self.client().post('/api/v2/users/requests'
                                             ,data = json.dumps(dict(title = "Computer cannot start"
                                                     ,description = "It beeps twice when powered"

@@ -103,7 +103,6 @@ def get_specific_user_request(requestId):
             if get_request is None:
                 return jsonify({'Response':'Request does not exist'}),409
             else:
-                print('request', get_request)
                 return jsonify({'Request': get_request}),200
         else:
             return jsonify({'Response':'You do not have a token, try logging in again'}),401  
@@ -121,7 +120,6 @@ def modify_user_request(requestId):
             user = decode_auth_token(token)
             cur.execute("SELECT * FROM requests WHERE userid = %s and id = %s ;", (user, requestId))
             get_request = cur.fetchone()
-            print('get_request',get_request)
             if get_request is None:
                 return jsonify({'Response':'Request does not exist'}),409
             elif get_request[4] == 'approved':
@@ -139,7 +137,6 @@ def modify_user_request(requestId):
                 #check if the request exists
                 cur.execute("SELECT * FROM requests WHERE userid = %s and id = %s ;", (user, requestId))
                 id = cur.fetchone()
-                print('id',id)
                 if id[1] != title or id[2] != description:
                     date = datetime.datetime.utcnow().strftime('%Y-%m-%d')
                     cur.execute("UPDATE requests SET title=%s, description=%s, trackertype=%s , status=%s WHERE id=%s;",(title, description, request_type, status, requestId))
@@ -163,11 +160,9 @@ def admin_read_requests():
             user = decode_auth_token(token)
             cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user, 1))
             users = cur.fetchone()
-            print('users', users)
             if users:
                 cur.execute("SELECT * FROM requests")
                 requests = cur.fetchall()
-                print('requests',requests)
                 if len(requests) == 0:
                     return jsonify({'Requests': 'No requests available'}),409
                 else:
