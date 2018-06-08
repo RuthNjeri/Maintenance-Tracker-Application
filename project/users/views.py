@@ -23,7 +23,7 @@ def jwt_auth_encode(userid):
 
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=10),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=240),
             'iat': datetime.datetime.utcnow(),
             'sub': userid
         }
@@ -56,7 +56,6 @@ def request_not_found(error):
 @users.route('/auth/signup', methods=['POST'])
 def create_user():
     form = request.get_json()
-    print('form', form)
     email = form['email']
     firstname = form['firstname']
     lastname = form['lastname']
@@ -69,8 +68,6 @@ def create_user():
             return jsonify({'response': 'password cannot be empty'})
         cur.execute("SELECT * FROM users WHERE email=%s and password=%s;", (email, password,))
         user = cur.fetchone()
-        print('user',user)
-
         if user is None:
             create_user_statement = """INSERT INTO
                 users  (email, firstname, lastname, password, role)
@@ -90,7 +87,6 @@ def login_user():
     form = request.get_json()
     email = form['email']
     password = form['password']
-
 
     try:
         cur.execute("SELECT * FROM users WHERE email=%s and password=%s;", (email, password,))

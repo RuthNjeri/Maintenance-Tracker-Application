@@ -36,6 +36,10 @@ def migration():
                             );"""
         cur.execute(users)
         cur.execute(requests)
+        create_user_admin = """INSERT INTO
+                users  (email, firstname, lastname, password, role)
+                VALUES ('%s','%s','%s','%s', %d)""" % ('admin@gmail.com','jane', 'joseph','12345', 1)
+        cur.execute(create_user_admin)
         conn.commit()
 
     except Exception as e:

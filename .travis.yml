@@ -22,8 +22,10 @@ script:
 
 script:
   - psql -c 'create database maintenanceapp;' -U postgres
+  - python migration.py
   - coverage run -m pytest
-  - py.test --cov=app project/tests/
+  - py.test --cov=project project/tests/
+
 
 
 
