@@ -79,7 +79,7 @@ def create_user():
             return jsonify({'response': 'user already exists'}),409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        return jsonify({'Response':'please enter your email, firstname, lastname and password' }),400
+        return jsonify({'response':'please enter your email, firstname, lastname and password' }),400
 
 
 @users.route('/auth/login', methods=['POST'])
@@ -99,6 +99,6 @@ def login_user():
             return jsonify(response),200
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
         print('e',e)
-        return jsonify({'Response': 'Please enter the correct user details'}),409
+        return jsonify({'response': 'Please enter the correct user details'}),409
 
 
