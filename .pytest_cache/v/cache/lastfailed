@@ -1,5 +1,6 @@
 {
   "project/tests/test_requests.py::MaintenanceTrackerApiTest": true,
+  "project/tests/test_requests.py::Test_requests::test_get_specific_user_request": true,
   "project/tests/test_users.py::MaintenanceTrackerApiTest": true,
   "project/tests/test_users.py::MaintenanceTrackerApiTest::test_user_not_signup_can_signin": true,
   "project/tests/test_users.py::MaintenanceTrackerApiTest::test_user_signup_signin": true,

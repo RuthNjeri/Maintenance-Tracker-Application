@@ -32,9 +32,7 @@ class Test_users(unittest.TestCase):
         self.cur.execute(user_id_statement)
         results = self.cur.fetchone()
         jwt_auth_token = jwt_auth_encode(results[0])
-        print('jet_auth_token ', type(jwt_auth_token))
         self.assertTrue(isinstance(jwt_auth_token,bytes))
-        print('decode',decode_auth_token(jwt_auth_token))
         self.assertTrue(decode_auth_token(jwt_auth_token) == results[0])
 
     def test_create_users(self):
