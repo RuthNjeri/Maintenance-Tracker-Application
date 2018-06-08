@@ -47,6 +47,8 @@ def user_create_request():
                 return jsonify({'Response': 'Title cannot be empty'}),400
             if description == "":
                 return jsonify({'Response':'Description cannot be empty'}),400
+            if status == "":
+                return jsonify({'Response':'Status cannot be empty'}),400
             #check if the request exists
             cur.execute("SELECT * FROM requests WHERE userid = %s and title = %s ;", (user, title))
             id = cur.fetchone()
@@ -123,7 +125,7 @@ def modify_user_request(requestId):
             if get_request is None:
                 return jsonify({'Response':'Request does not exist'}),409
             elif get_request[4] == 'approved':
-                return jsonify({'Response':'Cannot modify request'}),401
+                return jsonify({'Response':'Cannot modify already approved request'}),401
             else:
                 form = request.get_json()
                 title = form['title']
@@ -163,10 +165,10 @@ def admin_read_requests():
             if users:
                 cur.execute("SELECT * FROM requests")
                 requests = cur.fetchall()
-                if len(requests) == 0:
-                    return jsonify({'Requests': 'No requests available'}),409
-                else:
+                if requests:
                     return jsonify({'Requests': requests}),200
+                else:
+                    return jsonify({'Requests': 'No requests available'}),409
             else:
                 return jsonify({'Requests': 'Admin request only'}),401
         else:
@@ -187,13 +189,17 @@ def admin_approve_request(requestId):
             if users:
                 form = request.get_json()
                 status = form ['status']
-                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId))
+                if status != 'approve':
+                    return jsonify({'Response':'Enter status as approve!'})
+                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId,))
                 requests = cur.fetchone()
-                if len(requests) != 0:
+                if requests:
                     if requests[4] == 'pending':
                         cur.execute("UPDATE requests SET status=%s WHERE id=%s;",(status,requestId))
                         conn.commit()
                         return jsonify({'Response': 'Request approved!'}),201
+                    if requests[4] == 'approved':
+                        return jsonify({'Response': 'Request already approved'}),409
                     else:
                         return jsonify({'Response':'Status of the request is not pending'}),401
                 else:
@@ -216,9 +222,11 @@ def disapprove_request(requestId):
             if users:
                 form = request.get_json()
                 status = form ['status']
-                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId))
+                if status != 'disapprove':
+                    return jsonify({'Response':'Enter the status as disapprove!'})
+                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId,))
                 requests = cur.fetchone()
-                if len(requests) != 0:
+                if requests:
                     if requests[4] != 'disapprove':
                         cur.execute("UPDATE requests SET status=%s WHERE id=%s;",(status,requestId))
                         conn.commit()
@@ -246,9 +254,11 @@ def resolve_request(requestId):
             if users:
                 form = request.get_json()
                 status = form ['status']
-                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId))
+                if status != 'resolve':
+                    return jsonify({'Response':'Enter the status as resolve!'})
+                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId,))
                 requests = cur.fetchone()
-                if len(requests) != 0:
+                if requests:
                     if requests[4] != 'resolve':
                         cur.execute("UPDATE requests SET status=%s WHERE id=%s;",(status,requestId))
                         conn.commit()
