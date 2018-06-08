@@ -92,7 +92,7 @@ def get_user_requests():
         print('e',e)
         return jsonify({'Response': 'Something is wrong with your token, try logging in'}),401
 
-@trackerapp.route('/users/requests/<int:requestId>', methods = ['GET'])
+@trackerapp.route('/users/requests/<requestId>', methods = ['GET'])
 def get_specific_user_request(requestId):
 
     token = get_token()
@@ -113,7 +113,7 @@ def get_specific_user_request(requestId):
         print('e',e)
         return jsonify({'Response': 'Something is wrong with your token, try logging in'}),401
 
-@trackerapp.route('/users/requests/<int:requestId>', methods = ['PUT'])
+@trackerapp.route('/users/requests/<requestId>', methods = ['PUT'])
 def modify_user_request(requestId):
     token = get_token()
  
