@@ -1,282 +1,251 @@
-# project/requests/views.py
+# # project/requests/views.py
 
 # imports
 import datetime
 import jwt
 import psycopg2
-from flask import Flask, request, jsonify, abort, make_response, Blueprint
-from project.config import conn, Config
+from flask import Flask, request, jsonify, abort, Blueprint
+from project.config import Config
+from project.database import Database
 from project.users.views import decode_auth_token
-
 
 
 # configure blueprint
 trackerapp = Blueprint('trackerapp', __name__, template_folder='templates')
-#create cursor to connect to the database
-cur = conn.cursor()
+
+# create database object from Database class project/database.py
+
+db = Database()
+# create an admin user
 
 
-def get_token():
-    #get the JWT token
+def get_user_id():
+    """
+    get the user id from the token
+    """
     token = request.headers.get('token', None)
-    return token
+    user_id = decode_auth_token(token)
+
+    if not user_id:
+        return abort(401)
+    return user_id
 
 
-@trackerapp.route('/tracker')
-def index():
-    return "hello tracker"
+@trackerapp.errorhandler(401)
+def request_not_found(error):
+    """
+    response when resquest is made to endpoints not existing
+    """
+    return jsonify({'error': 'Token is invalid, login again'}), 401
+
 
 @trackerapp.errorhandler(404)
 def request_not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    """
+    response when resquest is made to endpoints not existing
+    """
+    return jsonify({'error': 'Request not found'}), 404
 
-@trackerapp.route('/users/requests',methods = ['POST'])
+
+@trackerapp.route('/users/requests', methods=['POST'])
 def user_create_request():
+    """
+    endpoint to create a user request
+    """
+    user_id = get_user_id()
+    form = request.get_json()
+    title = form['title']
+    description = form['description']
+    request_type = form['request_type']
 
-    token = get_token()
+    """
+    Validate user response
+    """
+    if title == "":
+        return jsonify({'response': 'Title cannot be empty'}), 400
+    if description == "":
+        return jsonify({'response': 'Description cannot be empty'}), 400
+    """
+    Check if the request exists
+    """
     try:
-        if token:
-            user = decode_auth_token(token)
+        db.request_exists(user_id, title)
+        if db.request is None:
+            date_created = datetime.datetime.utcnow().strftime('%Y-%m-%d')
+            db.create_request(title, description, request_type,
+                              date_created, user_id)
+            return jsonify({'response': 'request created successfully'}), 201
+        else:
+            return jsonify({'response': 'request already exists'}), 409
+
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'could not create request'}), 400
+
+
+@trackerapp.route('/users/requests', methods=['GET'])
+def get_user_requests():
+    """
+    endpoint to get all the requests of a user
+    """
+    user_id = get_user_id()
+    """
+    get the requests of the user from the database
+    """
+    try:
+        db.get_user_requests(user_id)
+        if db.requests:
+            return jsonify({'requests': db.all_requests}), 200
+        else:
+            return jsonify({'requests': 'You do not have any requests'}), 409
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'could not get requests'}), 400
+
+@trackerapp.route('/users/requests/<requestId>', methods=['GET'])
+def get_specific_user_request(requestId):
+    """
+    endpoint to return a specific user request
+    """
+    user_id = get_user_id()
+    try:
+        db.get_specific_request(user_id, requestId)
+        if db.request is None:
+            return jsonify({'response': 'Request does not exist'}), 409
+        else:
+            return jsonify({'request': db.request_labeled}), 200
+
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'could not get the request of that id'}), 409
+
+
+@trackerapp.route('/users/requests/<requestId>', methods=['PUT'])
+def modify_user_request(requestId):
+    """
+    Endpoint to modify a user request
+    """
+    user_id = get_user_id()
+    try:
+        db.get_specific_request(user_id, requestId)
+        if db.request is None:
+            return jsonify({'response': 'Request does not exist'}), 409
+        elif db.request_labeled['status'] == 'approved':
+            return jsonify({'response': 'Cannot modify already approved request'}), 401
+        else:
+            """
+            modify request
+            """
             form = request.get_json()
             title = form['title']
             description = form['description']
             request_type = form['type']
-            status = form['status']
-
+            """
+            Validate user input
+            """
             if title == "":
-                return jsonify({'response': 'Title cannot be empty'}),400
+                return jsonify({'response': 'Title cannot be empty'}), 400
             if description == "":
-                return jsonify({'response':'Description cannot be empty'}),400
-            if status == "":
-                return jsonify({'response':'Status cannot be empty'}),400
-            #check if the request exists
-            cur.execute("SELECT * FROM requests WHERE userid = %s and title = %s ;", (user, title))
-            id = cur.fetchone()
-            if id == None:
+                return jsonify({'response': 'Description cannot be empty'}), 400
+            """
+            if request details have changed
+            """
+            if db.request_labeled['title'] != title or db.request_labeled['description'] != description:
                 date = datetime.datetime.utcnow().strftime('%Y-%m-%d')
-                create_request = """INSERT INTO
-                 requests  (title, description, trackertype, status, feedback, datecreated,userid)
-                 VALUES ('%s','%s','%s','%s', '%s', '%s', '%s')""" % \
-                 (title, description, request_type, status,'no feedback', date, user)
-                cur.execute(create_request)
-                conn.commit()
-                return jsonify({'response': 'request created successfully'}),201
-
+                db.update_request(title, description,
+                                  request_type, requestId, date)
+                return jsonify({'response': 'request modified successfuly'}), 201
             else:
-                return jsonify({'response': 'Request already exists'}),409
+                return jsonify({'response': 'Cannot modify request, either change the title or description'}), 401
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'could not modify request of that id'}), 409
 
-        else:
-            return jsonify({'response':'You do not have a token, try logging in again'}),401  
 
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
-
-@trackerapp.route('/users/requests', methods = ['GET'] )
-def get_user_requests():
-
-    token = get_token()
-    try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM requests WHERE userid = %s;", [user])
-            requests = cur.fetchall()
-            if requests:
-                return jsonify({'requests': requests}),200
-            else:
-                return jsonify({'requests': 'You do not have any requests'}),409
-        else:
-            return jsonify({'response':'You do not have a token, try logging in again'}),401  
-
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
-
-@trackerapp.route('/users/requests/<requestId>', methods = ['GET'])
-def get_specific_user_request(requestId):
-
-    token = get_token()
- 
-    try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM requests WHERE userid = %s and id = %s ;", (user, requestId))
-            get_request = cur.fetchone()
-            if get_request is None:
-                return jsonify({'response':'Request does not exist'}),409
-            else:
-                return jsonify({'request': get_request}),200
-        else:
-            return jsonify({'response':'You do not have a token, try logging in again'}),401  
-
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
-
-@trackerapp.route('/users/requests/<requestId>', methods = ['PUT'])
-def modify_user_request(requestId):
-    token = get_token()
- 
-    try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM requests WHERE userid = %s and id = %s ;", (user, requestId))
-            get_request = cur.fetchone()
-            if get_request is None:
-                return jsonify({'response':'Request does not exist'}),409
-            elif get_request[4] == 'approved':
-                return jsonify({'response':'Cannot modify already approved request'}),401
-            else:
-                form = request.get_json()
-                title = form['title']
-                description = form['description']
-                request_type = form['type']
-                status = form['status']
-                if title == "":
-                    return jsonify({'response': 'Title cannot be empty'}),400
-                if description == "":
-                    return jsonify({'response':'Description cannot be empty'}),400
-                #check if the request exists
-                cur.execute("SELECT * FROM requests WHERE userid = %s and id = %s ;", (user, requestId))
-                id = cur.fetchone()
-                if id[1] != title or id[2] != description:
-                    date = datetime.datetime.utcnow().strftime('%Y-%m-%d')
-                    cur.execute("UPDATE requests SET title=%s, description=%s, trackertype=%s , status=%s WHERE id=%s;",(title, description, request_type, status, requestId))
-                    conn.commit()
-                    return jsonify({'response': 'request modified successfully'}),201
-                else:
-                    return jsonify({'response':'Cannot modify request, either change the title or description'}), 401
-
-        else:
-            return jsonify({'response':'You do not have a token, try logging in again'}),401
-
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
-
-@trackerapp.route('/requests/', methods = ['GET'])
+@trackerapp.route('/requests/', methods=['GET'])
 def admin_read_requests():
-    token = get_token()
+    """
+    admin endpoint to get all the requests
+    """
+    user_id = get_user_id()
     try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user, 1))
-            users = cur.fetchone()
-            if users:
-                cur.execute("SELECT * FROM requests")
-                requests = cur.fetchall()
-                if requests:
-                    return jsonify({'requests': requests}),200
-                else:
-                    return jsonify({'requests': 'No requests available'}),409
+        db.get_admin_user(user_id)
+        if db.admin:
+            db.all_users_requests()
+            if db.every_request:
+                return jsonify({'requests': db.every_request}), 200
             else:
-                return jsonify({'requests': 'Admin request only'}),401
+                return jsonify({'requests': 'No requests available'}), 409
         else:
-            return jsonify({'response':'You do not have a token, try logging in again'}),401  
+            return jsonify({'requests': 'Admin request only'}), 401
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'not allowed'}), 401
 
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
 
-@trackerapp.route('/requests/<requestId>/approve', methods = ['PUT'])
+@trackerapp.route('/requests/<requestId>/approve', methods=['PUT'])
 def admin_approve_request(requestId):
-    token = get_token()
+    """
+    endpoint for the admin to approve request
+    """
+    user_id = get_user_id()
     try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user, 1))
-            users = cur.fetchone()
-            if users:
-                form = request.get_json()
-                status = form ['status']
-                if status != 'approve':
-                    return jsonify({'response':'Enter status as approve!'})
-                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId,))
-                requests = cur.fetchone()
-                if requests:
-                    if requests[4] == 'pending':
-                        cur.execute("UPDATE requests SET status=%s WHERE id=%s;",(status,requestId))
-                        conn.commit()
-                        return jsonify({'response': 'Request approved!'}),201
-                    if requests[4] == 'approved':
-                        return jsonify({'response': 'Request already approved'}),409
-                    else:
-                        return jsonify({'response':'Status of the request is not pending'}),401
+        db.get_admin_user(user_id)
+        if db.admin:
+            db.request_status(requestId)
+            if db.requests:
+                if db.requests[4] == 'pending':
+                    db.update_request_status('approved', requestId)
+                    return jsonify({'response': 'Request approved!'}), 201
+                if requests[4] == 'approved':
+                    return jsonify({'response': 'Request already approved'}), 409
                 else:
-                    return jsonify({'response': 'Request not found'}),409
+                    return jsonify({'response': 'Status of the request is not pending'}), 401
             else:
-                return jsonify({'response':'This request is only for an admin'}),401
+                return jsonify({'response': 'Request not found'}), 409
+        else:
+            return jsonify({'response': 'This request is only for an admin'}), 401
 
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'not allowed'}), 401
 
-@trackerapp.route('/requests/<requestId>/disapprove', methods = ['PUT'])
+
+@trackerapp.route('/requests/<requestId>/disapprove', methods=['PUT'])
 def disapprove_request(requestId):
-    token = get_token()
+    """
+    endpoint for the admin to disapprove request
+    """
+    user_id = get_user_id()
     try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user, 1))
-            users = cur.fetchone()
-            if users:
-                form = request.get_json()
-                status = form ['status']
-                if status != 'disapprove':
-                    return jsonify({'response':'Enter the status as disapprove!'})
-                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId,))
-                requests = cur.fetchone()
-                if requests:
-                    if requests[4] != 'disapprove':
-                        cur.execute("UPDATE requests SET status=%s WHERE id=%s;",(status,requestId))
-                        conn.commit()
-                        return jsonify({'response': 'request disapproved!'}),201
-                    else:
-                        return jsonify({'response':'Request already disapproved!'}),409
-                else:
-                    return jsonify({'response': 'Request not found'}),409
+        db.get_admin_user(user_id)
+        if db.admin:
+            db.request_status(requestId)
+            if db.requests:
+                db.update_request_status('disapproved', requestId)
+                return jsonify({'response': 'Request disapproved!'}), 201
+                if requests[4] == 'disapproved':
+                    return jsonify({'response': 'Request already disapproved'}), 409
             else:
-                return jsonify({'response':'This request is only for an admin'}),401
+                return jsonify({'response': 'Request not found'}), 409
+        else:
+            return jsonify({'response': 'This request is only for an admin'}), 401
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'not allowed'}), 401
 
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
 
-
-@trackerapp.route('/requests/<requestId>/resolve', methods = ['PUT'])
+@trackerapp.route('/requests/<requestId>/resolve', methods=['PUT'])
 def resolve_request(requestId):
-    token = get_token()
+    """
+    endpoint for the admin to resolve request
+    """
+    user_id = get_user_id()
     try:
-        if token:
-            user = decode_auth_token(token)
-            cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user, 1))
-            users = cur.fetchone()
-            if users:
-                form = request.get_json()
-                status = form ['status']
-                if status != 'resolve':
-                    return jsonify({'response':'Enter the status as resolve!'})
-                cur.execute("SELECT * FROM requests WHERE id = %s ;", (requestId,))
-                requests = cur.fetchone()
-                if requests:
-                    if requests[4] != 'resolve':
-                        cur.execute("UPDATE requests SET status=%s WHERE id=%s;",(status,requestId))
-                        conn.commit()
-                        return jsonify({'response': 'Request resolved!'}),201
-                    else:
-                        return jsonify({'response':'Request already resolved!'}),409
-                else:
-                    return jsonify({'response': 'Request not found'}),409
+        db.get_admin_user(user_id)
+        if db.admin:
+            db.request_status(requestId)
+            if db.requests:
+                db.update_request_status('resolved', requestId)
+                return jsonify({'response': 'Request resolved!'}), 201
+                if requests[4] == 'resolved':
+                    return jsonify({'response': 'Request already resolved'}), 409
             else:
-                return jsonify({'response':'This request is only for an admin'}),401
-
-    except Exception as e:
-        print('e',e)
-        return jsonify({'response': 'Something is wrong with your token, try logging in'}),401
-
-
-
-
-
-
-
+                return jsonify({'response': 'Request not found'}), 409
+        else:
+            return jsonify({'response': 'This request is only for an admin'}), 401
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'not allowed'}), 401
