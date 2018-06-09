@@ -1,96 +1,87 @@
 # Maintenance-Tracker-Application 
 [![Build Status](https://travis-ci.com/RuthNjeri/Maintenance-Tracker-Application.svg?branch=develop)](https://travis-ci.com/RuthNjeri/Maintenance-Tracker-Application)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/d144cfc546fdaac3ff35/maintainability)](https://codeclimate.com/github/RuthNjeri/Maintenance-Tracker-Application/maintainability)
+[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg?branch=develop)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application?branch=develop)
 
-![issues open](https://img.shields.io/github/issues/RuthNjeri/Maintenance-Tracker-Application.svg)
+## PROJECT FEATURES
+1. Users can create an account and log in.<br>
+2. The users should be able to make maintenance or repairs request.<br>
+3. An admin should be able to approve/reject a repair/maintenance request.<br>
+4. The admin should be able to mark request as resolved once it is done.<br>
+5. The admin should be able to view all maintenance/repairs requests on the application.<br>
+6. The admin should be able to filter requests.<br>
+7. The user can view all his/her requests.<br>
 
-[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application)
 
-Provides users with the ability to reach out to operations or repairs department regarding repair or maintenance requests and monitor the status of their request.
+
 
 ## API ENDPOINTS ##
 | HTTP Method   | URI                          | Action                    |
 | ------------- |:----------------------------:|--------------------------:|
-| GET	          |/api/v1/requests	             |Retrieve list of requests  |  
-| GET           |/api/v1/requests/[request_id] |Retrieve a request         |  
-| POST          |/api/v1/requests              |Create a new request       |   
-| PUT           |/api/v1/requests/[request_id] |Update an existing request |       
-| DELETE        |/api/v1/requests/[request_id] |Delete an existing request | 
+| GET	          |/api/v2/requests	             |Retrieve list of requests  |  
+| GET           |/api/v2/requests/[request_id] |Retrieve a request         |  
+| POST          |/api/v2/requests              |Create a new request       |   
+| PUT           |/api/v2/requests/[request_id] |Update an existing request |       
+| DELETE        |/api/v2/requests/[request_id] |Delete an existing request |
+| POST          |/api/v2/auth/signup/          |Register a user            |
+| Post          |/api/v2/auth/login/           |Log in User                |
 
 ## Testing the Endpoints
-Navigate inside the Maintenance-Tracker-Application folder. `cd app` folder. open the `__init__.py`. Test the endpoints using [Postman](https://www.getpostman.com/)
+
+1.Clone the repository `git clone https://github.com/RuthNjeri/Maintenance-Tracker-Application.git` <br>
+2.Create a virtual environment `virtualenv project-env`<br>
+3.Activate the virtual environment`source project-env/bin/activate` and navigate to the application root folder `/Maintenance-Tracker-Application`<br>
+4.Install the requirements `pip install requirements.txt`<br>
+5.Create a database named `maintenanceapp` using [postgresql](https://www.postgresql.org/)<br>
+6.Run the application `python run.py`<br>
+7.Test the endpoints using [Postman](https://www.getpostman.com/)
 
 ## Screenshots
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927992/Specificreq_txelnk.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927992/newrequestcreated_enaeaq.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/Login2_nkcuye.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/GetNew_specific_user_request_zst783.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/PutReq_qlalpa.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/DeleteReq_rceurt.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927991/User1_enw9uw.png)
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527927992/user2_g1zzgo.png)
+# 1. Sign Up User
+![sign up](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/CreateUserapi.png)
+# 2. Login User
+![Log in](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/SignInUser.png)
+# 3. Logged in user can create a request
+![POST](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/UserCreateRequest.png)
+# 4. Logged in user can get all their requests
+![GET](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555780/UserGetRequests.png)
+# 5. Logged in user can get a specific request
+![GET](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/Usergetonerequest.png)
+# 6. Logged in user can edit a request
+![PUT](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/UsermodifyRequest.png)
+# 7. Logged in user can delete a request without a status
+![DELETE](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/UserdeleteRequest.png)
+# 8. An admin can view all users requests
+![GET](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/admingetallrequests.png)
+# 9. An admin can change status of a request
+![PUT](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/adminResolveRequest.png)
+![PUT](https://res.cloudinary.com/dp2m8umak/image/upload/v1528555781/requestdisapprove.png)
 
-## UI Tasks ##
+## UI Tasks Screenshots  ##
 
-**Sign Up Page**<br/>
-
-1. User [signup](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/signUp.html)<br/>  
-
-**Sign In Page**<br/>
- 
-2. User [signin](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/signIn.html)<br/>
-
-**A Page For The Admin To View All User Requests**<br/>
-
-3. [Admin can view all requests](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/AdminPage.html)<br/>
-
-**A Page Where An Admin Can Respond To All User Requests**<br/>
-
-4. [A page where an admin](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/AdminRespondRequests.html) can do the following:<br />
-    i)   See the details of a request<br />
-    ii)  Approve or disapprove a request<br />
-    iii) Resolve a request<br />
-
-**A Page For The User To View All Their Requests**<br>
-
-5. [See all his/her requests](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/UserRequests.html)<br />
-
-**A Page For The User To Create Requests**<br/>
-
-6. [Create requests](https://ruthnjeri.github.io/Maintenance-Tracker-Application/UI/createRequest.html)<br />
-
-### Testing ###
-
-```
-   1. Clone or download the repository in the develop branch. 
-   2. Navigate to the UI directory within the Maintenance-Tracker-Application folder.
-   3. Right click the templates with the .html extension and open in a browser.
-```
-#### Screenshots ####
-
-**Sign Up**
+# 1. Sign Up Page
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/Signup_stlonp.png)
-
-**Sign In**
+# 2. Sign In Page
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/Signin_biwjzt.png)
-
-**User Create Request Page**
+# 3. A Page For The Admin To View All User Requests
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/AdminViewAllReq_ihjn5f.png)
+# 4. A Page Where An Admin Can Respond To All User Requests
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/AdminRespondTorequests_fnuz6m.png)
+# 5. A Page For The User To View All Their Requests
+![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/UserViewAllRequests_izyykh.png)
+# 6. A Page For The User To Create Requests
 ![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539521/CreateRequest_dpajio.png)
 
-**User View All Requests Page**
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/UserViewAllRequests_izyykh.png)
+### Testing using Unittest ###
 
-**Admin View all User Requests Page**
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/AdminViewAllReq_ihjn5f.png)
+1.Clone the repository `git clone https://github.com/RuthNjeri/Maintenance-Tracker-Application.git` <br>
+2.Create a virtual environment `virtualenv project-env`<br>
+3.Activate the virtual environment`source project-env/bin/activate` and navigate to the application root folder `/Maintenance-Tracker-Application`<br>
+4.Install the requirements `pip install requirements.txt`<br>
+5.Create a database named `maintenanceapp` using [postgresql](https://www.postgresql.org/)<br>
+6.Test the application using the command `pytest`<br>
 
-**Admin Respond To User Requests Page**
-![](http://res.cloudinary.com/dqvk8ugtp/image/upload/v1527539522/AdminRespondTorequests_fnuz6m.png)
-   
-##### Testing Endpoints #####
-Navigate inside the Maintenance-Tracker-Application folder.<br>
-Install pytest with the command `pip install pytest` .<br>
-Run the command ```python -m pytest tests/```
+
 
    
    
