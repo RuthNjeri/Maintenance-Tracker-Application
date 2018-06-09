@@ -6,18 +6,18 @@ import jwt
 import psycopg2
 from flask import Flask, request, jsonify, abort, Blueprint
 from project.config import Config
-from project.database import Database
+from project.database import Request, User
 from project.users.views import decode_auth_token
 
 
 # configure blueprint
 trackerapp = Blueprint('trackerapp', __name__, template_folder='templates')
 
-# create database object from Database class project/database.py
+# create request object from Database class project/database.py
 
-db = Database()
+db = Request()
 # create an admin user
-
+admin = User()
 
 def get_user_id():
     """
@@ -165,8 +165,8 @@ def admin_read_requests():
     """
     user_id = get_user_id()
     try:
-        db.get_admin_user(user_id)
-        if db.admin:
+        admin.get_admin_user(user_id)
+        if admin.admin:
             db.all_users_requests()
             if db.every_request:
                 return jsonify({'requests': db.every_request}), 200
@@ -185,14 +185,14 @@ def admin_approve_request(requestId):
     """
     user_id = get_user_id()
     try:
-        db.get_admin_user(user_id)
-        if db.admin:
+        admin.get_admin_user(user_id)
+        if admin.admin:
             db.request_status(requestId)
             if db.requests:
                 if db.requests[4] == 'pending':
                     db.update_request_status('approved', requestId)
                     return jsonify({'response': 'Request approved!'}), 201
-                if requests[4] == 'approved':
+                if db.requests[4] == 'approved':
                     return jsonify({'response': 'Request already approved'}), 409
                 else:
                     return jsonify({'response': 'Status of the request is not pending'}), 401
@@ -212,8 +212,8 @@ def disapprove_request(requestId):
     """
     user_id = get_user_id()
     try:
-        db.get_admin_user(user_id)
-        if db.admin:
+        admin.get_admin_user(user_id)
+        if admin.admin:
             db.request_status(requestId)
             if db.requests:
                 db.update_request_status('disapproved', requestId)
@@ -235,8 +235,8 @@ def resolve_request(requestId):
     """
     user_id = get_user_id()
     try:
-        db.get_admin_user(user_id)
-        if db.admin:
+        admin.get_admin_user(user_id)
+        if admin.admin:
             db.request_status(requestId)
             if db.requests:
                 db.update_request_status('resolved', requestId)

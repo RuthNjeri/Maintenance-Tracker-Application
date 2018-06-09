@@ -7,8 +7,9 @@ from flask import Flask, Blueprint
 from project.users.views import jwt_auth_encode, decode_auth_token
 from project import app
 from project.users.views import users
+from project.database import User
 from migration import migration
-from project.database import Database
+
 
 
 class Test_users(unittest.TestCase):
@@ -19,7 +20,7 @@ class Test_users(unittest.TestCase):
         migration()
         self.app = app
         self.client = self.app.test_client
-        self.db = Database()
+        self.db = User()
 
     def test_jwt_authentication(self):
         """

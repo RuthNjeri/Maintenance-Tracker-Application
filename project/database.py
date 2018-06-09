@@ -3,39 +3,13 @@ from werkzeug.security import generate_password_hash
 from project.config import conn
 
 
-class Database():
-    """docstring for Database"""
+class Request():
+    """requests helper"""
 
     def __init__(self):
 
         self.conn = conn
         self.cur = self.conn.cursor()
-
-    def create_user(self, email, first_name, last_name, password):
-        """"
-        Create the user in the database
-        """
-        password_hash = generate_password_hash(password)
-        create_user_statement = """INSERT INTO
-                users  (email, first_name, last_name, password_hash, role)
-                VALUES ('%s','%s','%s','%s', %d)""" % (email, first_name, last_name, password_hash, 0)
-        self.cur.execute(create_user_statement)
-        self.conn.commit()
-
-    def user_email_exists(self, email):
-        """
-        Check if a user with a specific email exists in the database
-        """
-        self.cur.execute("SELECT * FROM users WHERE email=%s;", (email,))
-        self.user = self.cur.fetchone()
-
-    def get_admin_user(self, user_id):
-        """
-        query the database to see if a user is an admin
-        """
-        self.cur.execute(
-            "SELECT * FROM users WHERE id = %s and role = %s;", (user_id, 1))
-        self.admin = self.cur.fetchone()
 
     def request_exists(self, user_id, title):
         """
@@ -98,8 +72,7 @@ class Database():
         """
         query the status of a request
         """
-        self.cur.execute(
-            "SELECT * FROM requests WHERE id = %s ;", (request_id,))
+        self.cur.execute("SELECT * FROM requests WHERE id = %s ;", (request_id,))
         self.requests = self.cur.fetchone()
 
     def update_request_status(self, status, request_id):
@@ -109,3 +82,37 @@ class Database():
         self.cur.execute(
             "UPDATE requests SET status=%s WHERE id=%s;", (status, request_id))
         self.conn.commit()
+
+class User():
+    """
+    users helper
+    """
+    def __init__(self):
+
+        self.conn = conn
+        self.cur = self.conn.cursor()
+
+    def create_user(self, email, first_name, last_name, password):
+        """"
+        Create the user in the database
+        """
+        password_hash = generate_password_hash(password)
+        create_user_statement = """INSERT INTO
+                users  (email, first_name, last_name, password_hash, role)
+                VALUES ('%s','%s','%s','%s', %d)""" % (email, first_name, last_name, password_hash, 0)
+        self.cur.execute(create_user_statement)
+        self.conn.commit()
+
+    def user_email_exists(self, email):
+        """
+        Check if a user with a specific email exists in the database
+        """
+        self.cur.execute("SELECT * FROM users WHERE email=%s;", (email,))
+        self.user = self.cur.fetchone()
+
+    def get_admin_user(self, user_id):
+        """
+        query the database to see if a user is an admin
+        """
+        self.cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user_id, 1))
+        self.admin = self.cur.fetchone()

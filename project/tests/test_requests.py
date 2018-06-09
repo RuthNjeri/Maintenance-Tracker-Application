@@ -9,7 +9,6 @@ from project import app
 from project.users.views import jwt_auth_encode, decode_auth_token
 from project.requests.views import trackerapp
 from project.users.views import users, decode_auth_token
-from project.database import Database
 from migration import migration
 
 
@@ -21,7 +20,7 @@ class Test_requests(unittest.TestCase):
         migration()
         self.app = app
         self.client = self.app.test_client
-        self.db = Database()
+
         """
         create user
         """

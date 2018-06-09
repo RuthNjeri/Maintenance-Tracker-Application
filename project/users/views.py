@@ -8,12 +8,12 @@ from flask import Flask, request, jsonify, abort, make_response, Blueprint
 from validate_email import validate_email
 from werkzeug.security import check_password_hash
 from project.config import Config
-from project.database import Database
+from project.database import User
 
 """
 Create an object to perform database queries from the database class in project/database.py
 """
-db = Database()
+db = User()
 
 """
 Configure blueprint
