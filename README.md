@@ -1,7 +1,7 @@
 # Maintenance-Tracker-Application 
 [![Build Status](https://travis-ci.com/RuthNjeri/Maintenance-Tracker-Application.svg?branch=develop)](https://travis-ci.com/RuthNjeri/Maintenance-Tracker-Application)
 
-[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application)
+[![Coverage Status](https://coveralls.io/repos/github/RuthNjeri/Maintenance-Tracker-Application/badge.svg?branch=develop)](https://coveralls.io/github/RuthNjeri/Maintenance-Tracker-Application?branch=develop)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/2f140a8751ec676cd7d1/maintainability)](https://codeclimate.com/github/RuthNjeri/Maintenance-Tracker-Application/maintainability)
 
