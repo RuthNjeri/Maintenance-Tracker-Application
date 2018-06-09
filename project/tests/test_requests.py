@@ -1,4 +1,4 @@
-# tests/test_users.py
+# tests/test_requests.py
 
 # imports
 import unittest
