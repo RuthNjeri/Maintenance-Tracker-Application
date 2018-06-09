@@ -78,16 +78,18 @@ def user_create_request():
     Check if the request exists
     """
     try:
-        db.request_exists(user_id, title)
-        if db.request is None:
+        create = Request(title, description, request_type)
+        create.request_exists(user_id)
+        print('create_request', create.request)
+        if create.request is None:
             date_created = datetime.datetime.utcnow().strftime('%Y-%m-%d')
-            db.create_request(title, description, request_type,
-                              date_created, user_id)
+            create.create_request(date_created, user_id)
             return jsonify({'response': 'request created successfully'}), 201
         else:
             return jsonify({'response': 'request already exists'}), 409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        print('e', e)
         return jsonify({'error': 'could not create request'}), 400
 
 
