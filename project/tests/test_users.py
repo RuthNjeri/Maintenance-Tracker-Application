@@ -20,7 +20,16 @@ class Test_users(unittest.TestCase):
         migration()
         self.app = app
         self.client = self.app.test_client
-        self.db = User()
+        """
+        set initial values to pass to the database class
+        """
+        email = ""
+        first_name = ""
+        last_name = ""
+        password = ""
+        self.db = User(email, first_name, last_name, password)
+
+
 
     def test_jwt_authentication(self):
         """

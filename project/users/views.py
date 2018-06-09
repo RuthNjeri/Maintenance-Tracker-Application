@@ -13,7 +13,11 @@ from project.database import User
 """
 Create an object to perform database queries from the database class in project/database.py
 """
-db = User()
+email = ""
+first_name = ""
+last_name = ""
+password = ""
+db = User(email, first_name, last_name, password)
 
 """
 Configure blueprint

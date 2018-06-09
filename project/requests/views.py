@@ -14,10 +14,19 @@ from project.users.views import decode_auth_token
 trackerapp = Blueprint('trackerapp', __name__, template_folder='templates')
 
 # create request object from Database class project/database.py
+title = ""
+description = ""
+request_type = ""
 
-db = Request()
+db = Request(title, description, request_type)
 # create an admin user
-admin = User()
+email = ""
+first_name = ""
+last_name = ""
+password = ""
+
+admin = User(email, first_name, last_name, password)
+
 
 def get_user_id():
     """
@@ -249,3 +258,23 @@ def resolve_request(requestId):
             return jsonify({'response': 'This request is only for an admin'}), 401
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
         return jsonify({'error': 'not allowed'}), 401
+
+@trackerapp.route('/users/requests/<requestId>', methods=['DELETE'])
+def delete_user_request(requestId):
+    """
+    endpoint to return a specific user request
+    """
+    user_id = get_user_id()
+    try:
+        db.get_specific_request(user_id, requestId)
+        if db.request is None:
+            return jsonify({'response': 'Request does not exist'}), 409
+        else:
+            if db.request_labeled['status'] == "pending":
+                    db.delete_request(requestId)
+                    return jsonify({'response': "the record has been successfuly deleted"}), 202
+            else:
+                return jsonify({'response': "Cannot delete a record that has a status"}),401
+
+    except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        return jsonify({'error': 'could not get the request of that id'}), 409

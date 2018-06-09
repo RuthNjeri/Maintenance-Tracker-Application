@@ -209,6 +209,17 @@ class Test_requests(unittest.TestCase):
         data = json.loads(resource_resolve.data.decode())
         self.assertEqual(data['response'], "Request resolved!")
 
+    def test_delete_request(self):
+        """
+        test that a user can delete a request
+        """
+        request_resource = self.client().delete('/api/v2/users/requests/1',headers=self.headers)
+        data = json.loads(request_resource.data.decode())
+        print('data', data['response'])
+        self.assertEqual(request_resource.status_code, 202)
+        self.assertEqual(data['response'], "the record has been successfuly deleted")
+
+
 
 if __name__ == '__main__':
     unittest.main()
