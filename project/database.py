@@ -13,22 +13,22 @@ class Request():
         self.description = description
         self.request_type = request_type
 
-    def request_exists(self, user_id, title):
+    def request_exists(self, user_id):
         """
         Check if a user exists
         """
         cur.execute(
-            "SELECT * FROM requests WHERE user_id = %s and title = %s ;", (user_id, title))
+            "SELECT * FROM requests WHERE user_id = %s and title = %s ;", (user_id, self.title))
         self.request = cur.fetchone()
 
-    def create_request(self, title, description, request_type, date_created, user_id):
+    def create_request(self, date_created, user_id):
         """
         Create user request
         """
         create_request = """INSERT INTO
                  requests  (title, description, request_type, status, feedback, date_created, user_id)
                  VALUES ('%s','%s','%s','%s', '%s', '%s', '%s')""" % \
-            (title, description, request_type, 'pending',
+            (self.title, self.description, self.request_type, 'pending',
              'no feedback', date_created, user_id)
         cur.execute(create_request)
         conn.commit()
@@ -58,7 +58,7 @@ class Request():
 
     def update_request(self, title, description, request_type, requestId, date):
         cur.execute("UPDATE requests SET title=%s, description=%s, request_type=%s , status=%s , date_created=%s WHERE id=%s;",
-                         (title, description, request_type, 'pending', date, requestId))
+                         (self.title, self.description, self.request_type, 'pending', date, requestId))
         conn.commit()
 
     def all_users_requests(self):
@@ -101,22 +101,22 @@ class User():
         self.last_name = last_name
         self.password = password
 
-    def create_user(self, email, first_name, last_name, password):
+    def create_user(self):
         """"
         Create the user in the database
         """
-        password_hash = generate_password_hash(password)
+        password_hash = generate_password_hash(self.password)
         create_user_statement = """INSERT INTO
                 users  (email, first_name, last_name, password_hash, role)
-                VALUES ('%s','%s','%s','%s', %d)""" % (email, first_name, last_name, password_hash, 0)
+                VALUES ('%s','%s','%s','%s', %d)""" % (self.email, self.first_name, self.last_name, password_hash, 0)
         cur.execute(create_user_statement)
         conn.commit()
 
-    def user_email_exists(self, email):
+    def user_email_exists(self):
         """
         Check if a user with a specific email exists in the database
         """
-        cur.execute("SELECT * FROM users WHERE email=%s;", (email,))
+        cur.execute("SELECT * FROM users WHERE email=%s;", (self.email,))
         self.user = cur.fetchone()
 
     def get_admin_user(self, user_id):

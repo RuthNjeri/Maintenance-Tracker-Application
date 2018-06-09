@@ -92,15 +92,15 @@ def create_user():
         """
         search if the user exists in the database
         """
-        db.user_email_exists(email)
-        if db.user is None:
-            db.create_user(email, first_name, last_name, password)
+        register_user = User(email, first_name, last_name, password)
+        register_user.user_email_exists()
+        if register_user.user is None:
+            register_user.create_user()
             return jsonify({'response': 'user created successfully'}), 201
         else:
             return jsonify({'response': 'user already exists'}), 409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        print('e', e)
         return jsonify({'response': 'please enter your email, firstname, lastname and password'}), 400
 
 
@@ -112,17 +112,19 @@ def login_user():
     form = request.get_json()
     email = form['email']
     password = form['password']
-
+    first_name = ""
+    last_name = ""
     try:
         """
         look for the user in the database and compare passwords
         """
-        db.user_email_exists(email)
-        if check_password_hash(db.user[4], password):
+        login_user = User(email, first_name, last_name, password)
+        login_user.user_email_exists()
+        if check_password_hash(login_user.user[4], password):
             """
             Provide token if user password is correct
             """
-            token = jwt_auth_encode(db.user[0])
+            token = jwt_auth_encode(login_user.user[0])
             if token:
                 response = {'response': 'login successful', 'token': token.decode()
                             }

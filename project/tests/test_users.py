@@ -23,11 +23,8 @@ class Test_users(unittest.TestCase):
         """
         set initial values to pass to the database class
         """
-        email = ""
-        first_name = ""
-        last_name = ""
-        password = ""
-        self.db = User(email, first_name, last_name, password)
+
+        self.db = User("b@gmail.com", "Josh", "Doe", "12345678")
 
 
 
@@ -35,8 +32,8 @@ class Test_users(unittest.TestCase):
         """
         test if a user can be authenticated
         """
-        self.db.create_user("b@gmail.com", "Josh", "Doe", "1234")
-        self.db.user_email_exists("b@gmail.com")
+        self.db.create_user()
+        self.db.user_email_exists()
         jwt_auth_token = jwt_auth_encode(self.db.user[0])
         self.assertTrue(isinstance(jwt_auth_token, bytes))
         self.assertTrue(decode_auth_token(jwt_auth_token) == self.db.user[0])
