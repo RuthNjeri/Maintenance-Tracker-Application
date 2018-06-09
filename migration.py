@@ -3,9 +3,14 @@
 # create the tables for the application
 import psycopg2
 from project.config import conn
+from werkzeug.security import generate_password_hash
+
 
 
 def migration():
+    """
+    create the tables on the database
+    """
     cur = conn.cursor()
 
     try:
@@ -16,10 +21,10 @@ def migration():
         # create user table
         users = """CREATE TABLE users(
                                     id SERIAL PRIMARY KEY,
-                                    firstname VARCHAR(50),
-                                    lastname  VARCHAR(50),
+                                    first_name VARCHAR(50),
+                                    last_name  VARCHAR(50),
                                     email VARCHAR(50) UNIQUE,
-                                    password VARCHAR(50),
+                                    password_hash VARCHAR(100),
                                     role INT
 
                             );"""
@@ -28,19 +33,21 @@ def migration():
                                     id SERIAL PRIMARY KEY,
                                     title VARCHAR(50),
                                     description TEXT,
-                                    trackertype VARCHAR(50),
+                                    request_type VARCHAR(50),
                                     status VARCHAR(50),
                                     feedback VARCHAR(50),
-                                    datecreated TIMESTAMP,
-                                    userid INT references users(id)
+                                    date_created TIMESTAMP,
+                                    user_id INT references users(id)
                             );"""
         cur.execute(users)
         cur.execute(requests)
+        password_hash =  generate_password_hash('12345678')
         create_user_admin = """INSERT INTO
-                users  (email, firstname, lastname, password, role)
-                VALUES ('%s','%s','%s','%s', %d)""" % ('admin@gmail.com','jane', 'joseph','12345', 1)
+                users  (email, first_name, last_name, password_hash, role)
+                VALUES ('%s','%s','%s','%s', %d)""" % ('admin@gmail.com','jane', 'joseph', password_hash, 1)
         cur.execute(create_user_admin)
         conn.commit()
+
 
     except Exception as e:
         print('error',e)
