@@ -5,7 +5,6 @@ import datetime
 import jwt
 import psycopg2
 from flask import Flask, request, jsonify, abort, Blueprint
-from project.config import Config
 from project.database import Request, User
 from project.users.views import decode_auth_token
 
@@ -53,7 +52,7 @@ def request_not_found(error):
     """
     response when resquest is made to endpoints not existing
     """
-    return jsonify({'error': 'Request not found'}), 404
+    make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @trackerapp.route('/users/requests', methods=['POST'])
@@ -140,32 +139,38 @@ def modify_user_request(requestId):
             return jsonify({'response': 'Request does not exist'}), 409
         elif db.request_labeled['status'] == 'approved':
             return jsonify({'response': 'Cannot modify already approved request'}), 401
+        elif db.request_labeled['status'] == 'disapproved':
+            return jsonify({'response': 'Cannot modify already disapproved request'}), 401
+        elif db.request_labeled['status'] == 'resolved':
+            return jsonify({'response': 'Cannot modify already resolved request'}), 401
         else:
             """
             modify request
             """
             form = request.get_json()
-            title = form['title']
-            description = form['description']
-            request_type = form['type']
+            form_title = form['title']
+            form_description = form['description']
+            form_request_type = form['type']
             """
             Validate user input
             """
-            if title == "":
+
+            if form_title == "":
                 return jsonify({'response': 'Title cannot be empty'}), 400
-            if description == "":
+            if form_description == "":
                 return jsonify({'response': 'Description cannot be empty'}), 400
             """
             if request details have changed
             """
-            if db.request_labeled['title'] != title or db.request_labeled['description'] != description:
+            if db.request_labeled['title'] != form_title or db.request_labeled['description'] != form_description:
                 date = datetime.datetime.utcnow().strftime('%Y-%m-%d')
-                db.update_request(title, description,
-                                  request_type, requestId, date)
+                db.update_request(form_title, form_description,
+                                  form_request_type, requestId, date)
                 return jsonify({'response': 'request modified successfuly'}), 201
             else:
                 return jsonify({'response': 'Cannot modify request, either change the title or description'}), 401
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        print('e',e)
         return jsonify({'error': 'could not modify request of that id'}), 409
 
 

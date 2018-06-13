@@ -2,7 +2,7 @@
 
 # create the tables for the application
 import psycopg2
-from project.config import conn
+from project import config
 from werkzeug.security import generate_password_hash
 
 
@@ -11,7 +11,7 @@ def migration():
     """
     create the tables on the database
     """
-    cur = conn.cursor()
+    cur = config.conn.cursor()
 
     try:
         # delete tables if they exist
@@ -46,7 +46,7 @@ def migration():
                 users  (email, first_name, last_name, password_hash, role)
                 VALUES ('%s','%s','%s','%s', %d)""" % ('admin@gmail.com','jane', 'joseph', password_hash, 1)
         cur.execute(create_user_admin)
-        conn.commit()
+        config.conn.commit()
 
 
     except Exception as e:

@@ -1,8 +1,8 @@
 import psycopg2
 from werkzeug.security import generate_password_hash
-from project.config import conn
+from . import config
 
-cur = conn.cursor()
+cur = config.conn.cursor()
 
 class Request():
     """requests helper"""
@@ -31,7 +31,7 @@ class Request():
             (self.title, self.description, self.request_type, 'pending',
              'no feedback', date_created, user_id)
         cur.execute(create_request)
-        conn.commit()
+        config.conn.commit()
 
     def get_user_requests(self, user_id):
         """
@@ -58,8 +58,8 @@ class Request():
 
     def update_request(self, title, description, request_type, requestId, date):
         cur.execute("UPDATE requests SET title=%s, description=%s, request_type=%s , status=%s , date_created=%s WHERE id=%s;",
-                         (self.title, self.description, self.request_type, 'pending', date, requestId))
-        conn.commit()
+                         (title, description, self.request_type, 'pending', date, requestId))
+        config.conn.commit()
 
     def all_users_requests(self):
         cur.execute("SELECT * FROM requests")
@@ -83,7 +83,7 @@ class Request():
         """
         cur.execute(
             "UPDATE requests SET status=%s WHERE id=%s;", (status, request_id))
-        conn.commit()
+        config.conn.commit()
 
     def delete_request(self, request_id):
         """
@@ -110,7 +110,7 @@ class User():
                 users  (email, first_name, last_name, password_hash, role)
                 VALUES ('%s','%s','%s','%s', %d)""" % (self.email, self.first_name, self.last_name, password_hash, 0)
         cur.execute(create_user_statement)
-        conn.commit()
+        config.conn.commit()
 
     def user_email_exists(self):
         """

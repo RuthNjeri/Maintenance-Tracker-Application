@@ -54,7 +54,7 @@ def decode_auth_token(auth_token):
         return None
 
 
-@users.errorhandler(404)
+@users.app_errorhandler(404)
 def request_not_found(error):
     """
     Response for requests to endpoints that do not exist
