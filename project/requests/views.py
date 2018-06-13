@@ -69,7 +69,7 @@ def user_create_request():
     """
     Validate user response
     """
-    if title == "":
+    if title == "" or title == " ":
         return jsonify({'response': 'Title cannot be empty'}), 400
     if description == "":
         return jsonify({'response': 'Description cannot be empty'}), 400
@@ -79,7 +79,6 @@ def user_create_request():
     try:
         create = Request(title, description, request_type)
         create.request_exists(user_id)
-        print('create_request', create.request)
         if create.request is None:
             date_created = datetime.datetime.utcnow().strftime('%Y-%m-%d')
             create.create_request(date_created, user_id)
@@ -155,7 +154,7 @@ def modify_user_request(requestId):
             Validate user input
             """
 
-            if form_title == "":
+            if form_title == "" or form_title == " " :
                 return jsonify({'response': 'Title cannot be empty'}), 400
             if form_description == "":
                 return jsonify({'response': 'Description cannot be empty'}), 400
