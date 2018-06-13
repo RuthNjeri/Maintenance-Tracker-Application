@@ -101,7 +101,7 @@ def create_user():
             return jsonify({'response': 'user already exists'}), 409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        return jsonify({'response': 'please enter your email, firstname, lastname and password'}), 400
+        return jsonify({'response': 'Something went wrong'}), 400
 
 
 @users.route('/auth/login', methods=['POST'])
@@ -134,3 +134,4 @@ def login_user():
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
         print('e', e)
         return jsonify({'response': 'user not found'}), 409
+
