@@ -22,6 +22,9 @@ font-family:'Montserrat';
 
 #signin-link {
     margin-left: 2.5px;
+    margin-bottom: 1px;
+    margin-top: 1px;  
+
 }
 
 .header {
@@ -98,6 +101,13 @@ position: fixed;
 
 }
 
+#output {
+    margin-left: 75px;
+    margin-top: 2px;
+    color: red;
+
+}
+
 .sign-upform {
     margin-left: 75px;
     width: 500px;
@@ -122,8 +132,9 @@ position: fixed;
 
 .sign-up input[type=submit] {
     width: 300px;
-    padding: 12px 20px;
-    margin: 8px 0;
+    height: 50px;
+    padding: 5px 5px;
+    margin: 1px 0 0 -1;
     background-color:#0074B6;;
     color: white;
     cursor: pointer;

@@ -14,22 +14,23 @@
         <div class="header">
             <img id ="header-logo" src="/static/img/logo.png" alt="Logo"></a>
             <div class="header-right">
-                <a href="signUp.html">Sign Up</a>
+                <a href="{{ url_for('users.create_user')}}">Sign Up</a>
                 <a href="#about">About</a>
                 <a href="#faq">FAQ</a>
             </div>
         </div> 
         <div class="sign-up">
+            <p id="output"></p>
             <h3>Please Sign In!</h3>
-            <form action="#" class="sign-upform">
-                <input type="text" placeholder="Email" required>
+            <form id="login" action="#" class="sign-upform">
+                <input id="email" type="text" placeholder="Email" required>
                 <br/><br/>
-                <input type="password" placeholder="Password" required>
+                <input id="password" type="password" placeholder="Password" required>
                 <br/>
                 <a href="#" id="forgot-pw-link">Forgot Password</a>
                 <br/><br/>
                 <input type="submit" value="Sign Me In" required>
-                <p id="signin-link">Don't have an account? <a href="signUp.html">Sign Up</a></p>
+                <p id="signin-link">Don't have an account? <a href="{{ url_for('users.create_user')}}">Sign Up</a></p>
             </form>
         </div>
         <div class="footer"> 

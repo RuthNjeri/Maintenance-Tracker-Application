@@ -119,9 +119,17 @@ class User():
         cur.execute("SELECT * FROM users WHERE email=%s;", (self.email,))
         self.user = cur.fetchone()
 
+
     def get_admin_user(self, user_id):
         """
         query the database to see if a user is an admin
         """
         cur.execute("SELECT * FROM users WHERE id = %s and role = %s;", (user_id, 1))
         self.admin = cur.fetchone()
+
+    def get_user(self, user_id):
+        """
+        Get user using id
+        """
+        cur.execute("SELECT * FROM users WHERE id = %s;", (user_id,))
+        self.user = cur.fetchone()

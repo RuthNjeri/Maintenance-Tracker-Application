@@ -1,10 +1,10 @@
-# project/users/views.py
+# project/users/views.py 
 
 # imports
 import datetime
 import jwt
 import psycopg2
-from flask import Flask, request, jsonify, abort, make_response, Blueprint
+from flask import Flask, request, jsonify, abort, make_response, Blueprint, render_template,redirect, url_for
 from validate_email import validate_email
 from werkzeug.security import check_password_hash
 from project.config import Config
@@ -31,7 +31,7 @@ def jwt_auth_encode(userid):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3000),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600),
             'iat': datetime.datetime.utcnow(),
             'sub': userid
         }
@@ -53,7 +53,6 @@ def decode_auth_token(auth_token):
     except Exception as e:
         return None
 
-
 @users.app_errorhandler(404)
 def request_not_found(error):
     """
@@ -62,19 +61,20 @@ def request_not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
-@users.route('/auth/signup', methods=['POST'])
+@users.route('/auth/signup', methods=['POST', 'GET'])
 def create_user():
-    """
-    Endpoint to register a user with the details below
-    """
-    form = request.get_json()
-    email = form['email']
-    first_name = form['first_name']
-    last_name = form['last_name']
-    password = form['password']
-    confirm_password = form['confirm_password']
+
 
     try:
+        """
+        Endpoint to register a user with the details below
+        """
+        form = request.get_json()
+        email = form['email']
+        first_name = form['first_name']
+        last_name = form['last_name']
+        password = form['password']
+        confirm_password = form['confirm_password']
         """
         Validate user input
         """
@@ -96,30 +96,39 @@ def create_user():
         register_user.user_email_exists()
         if register_user.user is None:
             register_user.create_user()
-            return jsonify({'response': 'user created successfully'}), 201
+            return jsonify({'redirect_url': url_for('users.login_user'), 'successful': True}), 200
         else:
             return jsonify({'response': 'user already exists'}), 409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        return jsonify({'response': 'Something went wrong'}), 400
+        print('error', e)
+        return render_template('signUp.html')
 
 
-@users.route('/auth/login', methods=['POST'])
+@users.route('/auth/login', methods=['POST', 'GET'])
 def login_user():
-    """
-    Endpoint to login user with details below
-    """
-    form = request.get_json()
-    email = form['email']
-    password = form['password']
-    first_name = ""
-    last_name = ""
+
     try:
+        """
+        Endpoint to login user with details below
+        """
+        form = request.get_json()
+        email = form['email']
+        password = form['password']
+        first_name = ""
+        last_name = ""
         """
         look for the user in the database and compare passwords
         """
         login_user = User(email, first_name, last_name, password)
         login_user.user_email_exists()
+
+        if login_user.user == None :
+            """
+            if the email does not exist
+            """
+            return jsonify({'response': 'Please enter the correct user details'}), 409
+
         if check_password_hash(login_user.user[4], password):
             """
             Provide token if user password is correct
@@ -132,6 +141,5 @@ def login_user():
         else:
             return jsonify({'response': 'Please enter the correct user details'}), 409
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        print('e', e)
-        return jsonify({'response': 'user not found'}), 409
+        return render_template('signIn.html')
 
