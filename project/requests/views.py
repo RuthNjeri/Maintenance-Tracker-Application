@@ -4,7 +4,8 @@
 import datetime
 import jwt
 import psycopg2
-from flask import Flask, request, jsonify, abort, Blueprint
+from flask import Flask, request, jsonify, abort, Blueprint, url_for
+from functools import wraps
 from project.database import Request, User
 from project.users.views import decode_auth_token
 
@@ -38,6 +39,22 @@ def get_user_id():
         return abort(401)
     return user_id
 
+def admin_required(f):
+    """
+    login decorator 
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        user_id = get_user_id()
+        admin.get_user(user_id)
+
+        if admin.user is None:
+            return jsonify({'redirect_url': url_for('users.login_user')})
+        if not admin.user[-1] == 1:
+            return jsonify({'redirect_url': url_for('users.login_user')}) #custom messages
+
+        return f(*args, **kwargs)
+    return decorated_function
 
 @trackerapp.errorhandler(401)
 def request_not_found(error):
@@ -92,6 +109,7 @@ def user_create_request():
 
 
 @trackerapp.route('/users/requests', methods=['GET'])
+@admin_required
 def get_user_requests():
     """
     endpoint to get all the requests of a user
