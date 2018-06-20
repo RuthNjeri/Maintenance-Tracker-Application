@@ -4,7 +4,7 @@
 import datetime
 import jwt
 import psycopg2
-from flask import Flask, request, jsonify, abort, Blueprint, url_for
+from flask import Flask, request, jsonify, abort, Blueprint, url_for,  render_template,redirect
 from functools import wraps
 from project.database import Request, User
 from project.users.views import decode_auth_token
@@ -71,29 +71,37 @@ def request_not_found(error):
     """
     make_response(jsonify({'error': 'Not found'}), 404)
 
+@trackerapp.route("/loginredirect/<token>", methods=['GET'])
+def loginredirect(token):
+    user_id = decode_auth_token(token)
+    if user_id:
+            return redirect(url_for('trackerapp.user_create_request'))
 
-@trackerapp.route('/users/requests', methods=['POST'])
+
+@trackerapp.route('/users/requests', methods=['GET','POST'])
 def user_create_request():
     """
     endpoint to create a user request
     """
-    user_id = get_user_id()
-    form = request.get_json()
-    title = form['title']
-    description = form['description']
-    request_type = form['request_type']
+    
 
-    """
-    Validate user response
-    """
-    if title == "" or title == " ":
-        return jsonify({'response': 'Title cannot be empty'}), 400
-    if description == "":
-        return jsonify({'response': 'Description cannot be empty'}), 400
-    """
-    Check if the request exists
-    """
     try:
+        user_id = get_user_id()
+        form = request.get_json()
+        title = form['title']
+        description = form['description']
+        request_type = form['request_type']
+
+        """
+        Validate user response
+        """
+        if title == "" or title == " ":
+            return jsonify({'response': 'Title cannot be empty'}), 400
+        if description == "":
+            return jsonify({'response': 'Description cannot be empty'}), 400
+        """
+        Check if the request exists
+        """
         create = Request(title, description, request_type)
         create.request_exists(user_id)
         if create.request is None:
@@ -105,11 +113,11 @@ def user_create_request():
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
         print('e', e)
-        return jsonify({'error': 'could not create request'}), 400
+        return render_template('createRequest.html')
 
 
-@trackerapp.route('/users/requests', methods=['GET'])
-@admin_required
+
+@trackerapp.route('/users/requests/', methods=['GET'])
 def get_user_requests():
     """
     endpoint to get all the requests of a user
@@ -192,6 +200,7 @@ def modify_user_request(requestId):
 
 
 @trackerapp.route('/requests/', methods=['GET'])
+@admin_required
 def admin_read_requests():
     """
     admin endpoint to get all the requests
@@ -212,6 +221,7 @@ def admin_read_requests():
 
 
 @trackerapp.route('/requests/<requestId>/approve', methods=['PUT'])
+@admin_required
 def admin_approve_request(requestId):
     """
     endpoint for the admin to approve request
@@ -239,6 +249,7 @@ def admin_approve_request(requestId):
 
 
 @trackerapp.route('/requests/<requestId>/disapprove', methods=['PUT'])
+@admin_required
 def disapprove_request(requestId):
     """
     endpoint for the admin to disapprove request
@@ -262,6 +273,7 @@ def disapprove_request(requestId):
 
 
 @trackerapp.route('/requests/<requestId>/resolve', methods=['PUT'])
+@admin_required
 def resolve_request(requestId):
     """
     endpoint for the admin to resolve request

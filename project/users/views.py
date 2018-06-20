@@ -10,6 +10,7 @@ from werkzeug.security import check_password_hash
 from project.config import Config
 from project.database import User
 
+
 """
 Create an object to perform database queries from the database class in project/database.py
 """
@@ -135,7 +136,7 @@ def login_user():
             """
             token = jwt_auth_encode(login_user.user[0])
             if token:
-                response = {'response': 'login successful', 'token': token.decode()
+                response = {'token': token.decode(),'successful': True
                             }
                 return jsonify(response), 200
         else:

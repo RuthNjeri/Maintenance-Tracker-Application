@@ -7,7 +7,6 @@
     <link rel="shortcut icon" href="/static/img/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="/static/css/main.css" />
-    <script src="/static/js/main.js"></script>
 </head>
 <body>
     <div id="container">
@@ -21,16 +20,13 @@
         </div>      
         <div class="sign-up">
             <h3>Create Request</h3>
-            <form action="#" class="sign-upform">
-                <input type="text" placeholder="Title" required>
-                <br/><br/>
-                <textarea type="text" placeholder="Description" required></textarea>
-                <br/><br/>
-                <select class="type-select" name="type">
-                    <option value="choose-type" value="null">Select One Option</option>
-                    <option  class="others" value="repair">Repair</option>
-                    <option  class="others" value="maintenance">Maintenance</option>
-                </select>
+            <p id="output"></p>
+            <form id="create_request" class="sign-upform">
+                <input id="title" type="text" placeholder="Title" required>
+                <br/>
+                <textarea id="description" type="text" placeholder="Description" required></textarea>
+                <br/>
+                <input id="request_type" type="text" placeholder="Request type">
                 <br/>
                 <input type="submit" value="Submit" required>
             </form>
@@ -39,5 +35,7 @@
             <p id="date-footer"></p>
         </div>  
     </div>
+<script src="/static/js/main.js"></script>
+<script src="/static/js/create_request.js"></script>
 </body>
 </html>

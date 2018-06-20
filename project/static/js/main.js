@@ -1,4 +1,3 @@
-
 window.onload = function() {
     //create text for the footer
     var year = new Date().getFullYear();
@@ -71,13 +70,58 @@ if (signin){
             }
             // store the token created when user is logged in
             window.localStorage.setItem('token', data.token);
-        })
+            if (data.successful && data.successful === true){
 
-    }
+                window.location = "http://127.0.0.1:5000/api/v2/loginredirect/" + data.token
 
+            }
+})
 
 }
+}
+// // User get requests
 
+// function userRequests(e){
+//     e.preventDefault();
+//     let token = window.localStorage.getItem('token');
+//     console.log(token)
+
+//     fetch('http://127.0.0.1:5000/api/v2/users/requests/', {
+//         method: 'GET',
+//         headers: {
+//             'Accept': 'application/json, text/plain, */*',
+//             'Content-type':'application/json',
+//             'token': token
+//         }
+//         })
+//         .then((res) => res.json())
+//         .then((data) => {
+//             let output = '<h3>All Requests</h3>';
+//             data.forEach(function(users_requests){
+//                 output += `
+//             <table id="userRequests">
+//                 <tr>
+//                     <th>ID</th>
+//                     <th>Title</th>
+//                     <th>Description</th>
+//                     <th>Date</th>
+//                     <th>Status</th>
+//                     <th>Feedback</th>
+//                 </tr>
+//             </table> 
+//                    <td>${users_requests.id}</td>
+//                     <td>Computer won't start</td>
+//                     <td>When I power up my computer I hear 3 beeps then it shuts down</td>
+//                     <td>12/02/94</td>
+//                     <td>Resolved</td>
+//                     <td>Please bring it to the technicians in 8th floor</td>
+//                     <td>edit</td>
+//                     <td>delete</td>`;
+//             })
+
+//         })
+
+//     }
 // window onload curlybrace
 }
 
