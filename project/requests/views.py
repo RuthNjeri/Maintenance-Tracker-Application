@@ -48,7 +48,7 @@ def request_not_found(error):
     return jsonify({'error': 'Token is invalid, login again'}), 401
 
 
-@trackerapp.errorhandler(404)
+@trackerapp.app_errorhandler(404)
 def request_not_found(error):
     """
     response when resquest is made to endpoints not existing
@@ -70,7 +70,7 @@ def user_create_request():
     """
     Validate user response
     """
-    if title == "":
+    if title == "" or title == " ":
         return jsonify({'response': 'Title cannot be empty'}), 400
     if description == "":
         return jsonify({'response': 'Description cannot be empty'}), 400
@@ -151,7 +151,7 @@ def modify_user_request(requestId):
             """
             Validate user input
             """
-            if title == "":
+            if title == "" or title == " ":
                 return jsonify({'response': 'Title cannot be empty'}), 400
             if description == "":
                 return jsonify({'response': 'Description cannot be empty'}), 400

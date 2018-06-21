@@ -54,7 +54,7 @@ def decode_auth_token(auth_token):
         return None
 
 
-@users.errorhandler(404)
+@users.app_errorhandler(404)
 def request_not_found(error):
     """
     Response for requests to endpoints that do not exist
@@ -101,7 +101,7 @@ def create_user():
             return jsonify({'response': 'user already exists'}), 409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        return jsonify({'response': 'please enter your email, firstname, lastname and password'}), 400
+        return jsonify({'response': 'something went wrong'}), 400
 
 
 @users.route('/auth/login', methods=['POST'])
