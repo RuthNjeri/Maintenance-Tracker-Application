@@ -16,15 +16,21 @@
 
 
 ## API ENDPOINTS ##
-| HTTP Method   | URI                          | Action                    |
-| ------------- |:----------------------------:|--------------------------:|
-| GET	          |/api/v2/requests	             |Retrieve list of requests  |  
-| GET           |/api/v2/requests/[request_id] |Retrieve a request         |  
-| POST          |/api/v2/requests              |Create a new request       |   
-| PUT           |/api/v2/requests/[request_id] |Update an existing request |       
-| DELETE        |/api/v2/requests/[request_id] |Delete an existing request |
-| POST          |/api/v2/auth/signup/          |Register a user            |
-| Post          |/api/v2/auth/login/           |Log in User                |
+| HTTP Method |                   URI                   |                             Action |
+|-------------|---------------------------------------|-----------------------------------|
+| GET         |/api/v2/requests                                   |Admin retrieve list of requests |
+| PUT         |/api/v2/auth/admin                              | Admin upgrade normal user to admin |
+| PUT         |/api/v2/requests/[requestId]/resolve  |Admin resolve request |
+| PUT         |/api/v2/requests/[requestId]/approve  |Admin approve request |
+| PUT         | /api/v2/requests/[requestId]/disapprove | Admin disapprove request |
+| GET         |      /api/v2/requests/[request_id]      |                 Retrieve a request |
+| POST        |          /api/v2/users/requests         |               Create a new request |
+| GET        |          /api/v2/users/requests         |               Get all user requests |
+| PUT         |      /api/v2/requests/[request_id]      |         Update an existing request |
+| DELETE      |      /api/v2/requests/[request_id]      |         Delete an existing request |
+| POST        |           /api/v2/auth/signup/          |                    Register a user |
+| POST        |           /api/v2/auth/login/           |                        Log in User |
+| GET         |             /api/v2/signout             |                       Signout User |
 
 ## Testing the Endpoints
 
