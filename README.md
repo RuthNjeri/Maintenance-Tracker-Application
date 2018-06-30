@@ -18,7 +18,7 @@
 ## API ENDPOINTS ##
 | HTTP Method |                   URI                   |                             Action |
 |-------------|---------------------------------------|-----------------------------------|
-| GET         |/api/v2/requests                                   |Admin retrieve list of requests |
+| GET         |/api/v2/requests/                                   |Admin retrieve list of requests |
 | PUT         |/api/v2/auth/admin                              | Admin upgrade normal user to admin |
 | PUT         |/api/v2/requests/[requestId]/resolve  |Admin resolve request |
 | PUT         |/api/v2/requests/[requestId]/approve  |Admin approve request |
