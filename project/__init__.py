@@ -1,20 +1,16 @@
-#project/app.py
+# project/app.py
 
-#imports
+# imports
 import os
 from flask import Flask
-from . import config
-#blueprints
+# blueprints
 from project.requests.views import trackerapp
 from project.users.views import users
 
-
-
-
-#configuration
+# configuration
 app = Flask(__name__)
 
-#register blueprints
+# register blueprints
 app.register_blueprint(users, url_prefix='/api/v2')
 app.register_blueprint(trackerapp, url_prefix='/api/v2')
 
@@ -24,8 +20,3 @@ app_settings = os.getenv(
     'project.config.DevConfig'
 )
 app.config.from_object(app_settings)
-
-
-
-
-

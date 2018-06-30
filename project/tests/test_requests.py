@@ -2,13 +2,9 @@
 
 # imports
 import unittest
-import sys
 import json
-from flask import Flask, Blueprint
 from project import app
-from project.users.views import jwt_auth_encode, decode_auth_token
-from project.requests.views import trackerapp
-from project.users.views import users, decode_auth_token
+from project.users.views import decode_auth_token
 from migration import migration
 
 
@@ -24,8 +20,15 @@ class Test_requests(unittest.TestCase):
         """
         create user
         """
-        resource = self.client().post('api/v2/auth/signup', data=json.dumps(dict(email='b@gmail.com', first_name='james', last_name='doe', password='12345678', confirm_password='12345678'
-                                                                                 )), content_type='application/json')
+        resource = self.client().post('api/v2/auth/signup',
+                                      data=json.dumps(
+                                          dict(email='b@gmail.com',
+                                               first_name='james',
+                                               last_name='doe',
+                                               password='12345678',
+                                               confirm_password='12345678'
+                                               )),
+                                      content_type='application/json')
         data = json.loads(resource.data.decode())
         self.assertEqual(resource.status_code, 201)
         self.assertEqual(resource.content_type, 'application/json')
@@ -33,21 +36,38 @@ class Test_requests(unittest.TestCase):
         """
         login user
         """
-        resource_login = self.client().post('api/v2/auth/login', data=json.dumps(dict(email="b@gmail.com", password="12345678"
-                                                                                      )), content_type='application/json')
+        resource_login = self.client().post('api/v2/auth/login',
+                                            data=json.dumps(
+                                                dict(email="b@gmail.com",
+                                                     password="12345678"
+                                                     )),
+                                            content_type='application/json')
         data = json.loads(resource_login.data.decode())
         self.assertTrue(data['token'])
         self.assertEqual(decode_auth_token(data['token']), 2)
         self.assertEqual(resource_login.status_code, 200)
         self.assertEqual(resource_login.content_type, 'application/json')
         self.assertEqual(data['response'], 'login successful')
-        self.headers = {'content-type': 'application/json','token': data['token']}
+        self.headers = {'content-type': 'application/json',
+                        'token': data['token']}
 
         """
         Create request
         """
-        self.request_resource = self.client().post('/api/v2/users/requests', data=json.dumps(dict(title="Computer cannot start", description="It beeps twice when powered", request_type="repair"
-                                                                                                  )), headers=self.headers)
+        self.request_resource = self.client().post('/api/v2/users/requests',
+                                                   data=json.dumps(
+                                                       dict(title="Computer" +
+                                                            " " + "cannot" +
+                                                            " " + "start",
+                                                            description="It" +
+                                                            " " + "beeps" +
+                                                            " " + "twice" +
+                                                            " " + "when" +
+                                                            " " + "powered",
+                                                            request_type="re" +
+                                                            "" + "pair"
+                                                            )),
+                                                   headers=self.headers)
         data = json.loads(self.request_resource.data.decode())
         self.assertEqual(self.request_resource.status_code, 201)
         self.assertEqual(data['response'], 'request created successfully')
@@ -55,8 +75,12 @@ class Test_requests(unittest.TestCase):
         """
         Log in admin user
         """
-        resource_login = self.client().post('api/v2/auth/login', data=json.dumps(dict(email="admin@gmail.com", password="12345678"
-                                                                                      )), content_type='application/json')
+        resource_login = self.client().post('api/v2/auth/login',
+                                            data=json.dumps(
+                                                dict(email="admin@gmail.com",
+                                                     password="12345678"
+                                                     )),
+                                            content_type='application/json')
         data = json.loads(resource_login.data.decode())
         self.assertEqual(resource_login.content_type, 'application/json')
         self.assertEqual(data['response'], 'login successful')
@@ -67,8 +91,16 @@ class Test_requests(unittest.TestCase):
         """
         create request
         """
-        request_resource = self.client().post('/api/v2/users/requests', data=json.dumps(dict(title="Monitor cannot start", description="something is wrong", request_type="repair"
-                                                                                             )), headers=self.headers)
+        request_resource = self.client().post('/api/v2/users/requests',
+                                              data=json.dumps(
+                                                  dict(title="Monitor" +
+                                                       " " + "cannot start",
+                                                       description="some"
+                                                       "" + "thing" +
+                                                       " " + "is wrong",
+                                                       request_type="repair"
+                                                       )),
+                                              headers=self.headers)
         data = json.loads(request_resource.data.decode())
         self.assertEqual(request_resource.content_type, 'application/json')
         self.assertEqual(data['response'], 'request created successfully')
@@ -78,8 +110,16 @@ class Test_requests(unittest.TestCase):
         """
         test that a user cannot create an already existing request
         """
-        request_resource = self.client().post('/api/v2/users/requests', data=json.dumps(dict(title="Computer cannot start", description="It beeps twice when powered", request_type="repair"
-                                                                                             )), headers=self.headers)
+        request_resource = self.client().post('/api/v2/users/requests',
+                                              data=json.dumps(
+                                                  dict(title="Computer" +
+                                                       " " + "cannot start",
+                                                       description="It" + " " +
+                                                       "beeps twice" + " " +
+                                                       "when powered",
+                                                       request_type="repair"
+                                                       )),
+                                              headers=self.headers)
         data = json.loads(request_resource.data.decode())
         self.assertEqual(request_resource.status_code, 409)
         self.assertEqual(request_resource.content_type, 'application/json')
@@ -122,10 +162,18 @@ class Test_requests(unittest.TestCase):
 
     def test_modify_request(self):
         """
-        test that a user can modify a request 
+        test that a user can modify a request
         """
-        request_resource = self.client().put('/api/v2/users/requests/1', data=json.dumps(dict(title="Computer cannot start", description="poured coffee accidentally on it", type="repair"
-                                                                                              )), headers=self.headers)
+        request_resource = self.client().put('/api/v2/users/requests/1',
+                                             data=json.dumps(
+                                                 dict(title="Computer" + " " +
+                                                      "cannot start",
+                                                      description="poured" +
+                                                      " " + "coffee" +
+                                                      " " + "accidentally" +
+                                                      " " + "on it",
+                                                      type="repair")),
+                                             headers=self.headers)
         self.assertEqual(request_resource.status_code, 201)
         data = json.loads(request_resource.data.decode())
         self.assertEqual(data['response'], "request modified successfuly")
@@ -152,7 +200,9 @@ class Test_requests(unittest.TestCase):
         """
 
         resource_approve = self.client().put('api/v2/requests/1/approve',
-                                             data=json.dumps(dict(status="approved")), headers=self.headers)
+                                             data=json.dumps(
+                                                 dict(status="approved")),
+                                             headers=self.headers)
         self.assertEqual(resource_approve.status_code, 401)
         data = json.loads(resource_approve.data.decode())
         self.assertEqual(data['response'], "This request is only for an admin")
@@ -163,7 +213,10 @@ class Test_requests(unittest.TestCase):
         """
 
         resource_disapprove = self.client().put('api/v2/requests/1/approve',
-                                                data=json.dumps(dict(status="disapproved")), headers=self.headers)
+                                                data=json.dumps(
+                                                    dict(status="disapproved"
+                                                         )),
+                                                headers=self.headers)
         self.assertEqual(resource_disapprove.status_code, 401)
         data = json.loads(resource_disapprove.data.decode())
         self.assertEqual(data['response'], "This request is only for an admin")
@@ -174,7 +227,9 @@ class Test_requests(unittest.TestCase):
         """
 
         resource_resolve = self.client().put('api/v2/requests/1/approve',
-                                             data=json.dumps(dict(status="approved")), headers=self.headers)
+                                             data=json.dumps(
+                                                 dict(status="approved")),
+                                             headers=self.headers)
         self.assertEqual(resource_resolve.status_code, 401)
         data = json.loads(resource_resolve.data.decode())
         self.assertEqual(data['response'], "This request is only for an admin")
@@ -184,7 +239,9 @@ class Test_requests(unittest.TestCase):
         test that only an admin can approve requests
         """
         resource_resolve = self.client().put('api/v2/requests/1/approve',
-                                             data=json.dumps(dict(status="approved")), headers=self.admin_headers)
+                                             data=json.dumps(
+                                                 dict(status="approved")),
+                                             headers=self.admin_headers)
         self.assertEqual(resource_resolve.status_code, 201)
         data = json.loads(resource_resolve.data.decode())
         self.assertEqual(data['response'], "Request approved!")
@@ -194,7 +251,9 @@ class Test_requests(unittest.TestCase):
         test that only an admin can disapprove requests
         """
         resource_resolve = self.client().put('api/v2/requests/1/disapprove',
-                                             data=json.dumps(dict(status="disapproved")), headers=self.admin_headers)
+                                             data=json.dumps(
+                                                 dict(status="disapproved")),
+                                             headers=self.admin_headers)
         self.assertEqual(resource_resolve.status_code, 201)
         data = json.loads(resource_resolve.data.decode())
         self.assertEqual(data['response'], "Request disapproved!")
@@ -204,7 +263,9 @@ class Test_requests(unittest.TestCase):
         test that only an admin can resolve requests
         """
         resource_resolve = self.client().put('api/v2/requests/1/resolve',
-                                             data=json.dumps(dict(status="resolved")), headers=self.admin_headers)
+                                             data=json.dumps(
+                                                 dict(status="resolved")),
+                                             headers=self.admin_headers)
         self.assertEqual(resource_resolve.status_code, 201)
         data = json.loads(resource_resolve.data.decode())
         self.assertEqual(data['response'], "Request resolved!")
@@ -213,12 +274,13 @@ class Test_requests(unittest.TestCase):
         """
         test that a user can delete a request
         """
-        request_resource = self.client().delete('/api/v2/users/requests/1',headers=self.headers)
+        request_resource = self.client().delete(
+            '/api/v2/users/requests/1', headers=self.headers)
         data = json.loads(request_resource.data.decode())
         print('data', data['response'])
         self.assertEqual(request_resource.status_code, 202)
-        self.assertEqual(data['response'], "the record has been successfuly deleted")
-
+        self.assertEqual(data['response'],
+                         "the record has been successfuly deleted")
 
 
 if __name__ == '__main__':
