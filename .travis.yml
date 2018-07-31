@@ -1,0 +1,35 @@
+dist: trusty
+
+language: python
+python:
+  - "3.6"
+
+# command to install dependencies
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+
+branches:
+    only:
+        - develop
+
+install:
+  - pip install -r requirements.txt
+
+# command to run tests
+script:
+  - pytest
+
+script:
+  - psql -c 'create database maintenanceapp;' -U postgres
+  - python migration.py
+  - coverage run -m pytest
+  - py.test --cov=project project/tests/
+
+
+
+
+
+after_success: 
+  - coveralls
+
