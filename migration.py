@@ -1,10 +1,9 @@
 # /migtation.py
 
 # create the tables for the application
-import psycopg2
+
 from project.config import conn
 from werkzeug.security import generate_password_hash
-
 
 
 def migration():
@@ -16,7 +15,7 @@ def migration():
     try:
         # delete tables if they exist
         cur.execute("DROP TABLE IF EXISTS users,requests;")
-
+        cur.execute("DROP TABLE IF EXISTS tokens;")
 
         # create user table
         users = """CREATE TABLE users(
@@ -39,18 +38,23 @@ def migration():
                                     date_created TIMESTAMP,
                                     user_id INT references users(id)
                             );"""
+        # create black listed tokens table
+        tokens = """CREATE TABLE tokens(
+                                    id SERIAL PRIMARY KEY,
+                                    expired_tokens VARCHAR(150)
+                            );"""
         cur.execute(users)
         cur.execute(requests)
-        password_hash =  generate_password_hash('12345678')
+        cur.execute(tokens)
+        password_hash = generate_password_hash('12345678')
         create_user_admin = """INSERT INTO
                 users  (email, first_name, last_name, password_hash, role)
-                VALUES ('%s','%s','%s','%s', %d)""" % ('admin@gmail.com','jane', 'joseph', password_hash, 1)
+                VALUES ( '%s', '%s', '%s', '%s', %d)""" \
+                % ('admin@gmail.com', 'jane', 'joseph', password_hash, 1)
         cur.execute(create_user_admin)
         conn.commit()
-
-
     except Exception as e:
-        print('error',e)
+        print('error', e)
 
 
 migration()

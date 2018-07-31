@@ -12,8 +12,8 @@ try:
         "dbname=maintenanceapp host=localhost user=postgres password=1234")
 
 
-except:
-    print("database not connected")
+except Exception as e:
+    print("database not connected", e)
 
 
 class Config(object):
@@ -21,7 +21,8 @@ class Config(object):
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv(
-        'SECRET', "\x00\x8e6b\x99\x8d\x9a\xea\xea\x8a\x0e\x91\xa8'U\xe8\xdb N\x8d\xd4\xeeDu")
+        'SECRET', "\x00\x8e6b\x99\x8d\x9a\xea\xea\x8a\x0e\x91\xa8 \
+        'U\xe8\xdb N\x8d\xd4\xeeDu")
 
 
 class DevConfig(Config):

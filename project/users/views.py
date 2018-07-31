@@ -4,20 +4,12 @@
 import datetime
 import jwt
 import psycopg2
-from flask import Flask, request, jsonify, abort, make_response, Blueprint
+from flask import request, jsonify, make_response, Blueprint
 from validate_email import validate_email
 from werkzeug.security import check_password_hash
 from project.config import Config
 from project.database import User
 
-"""
-Create an object to perform database queries from the database class in project/database.py
-"""
-email = ""
-first_name = ""
-last_name = ""
-password = ""
-db = User(email, first_name, last_name, password)
 
 """
 Configure blueprint
@@ -31,7 +23,8 @@ def jwt_auth_encode(userid):
     """
     try:
         payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3000),
+            'exp': datetime.datetime.utcnow() +
+            datetime.timedelta(days=0, seconds=3000),
             'iat': datetime.datetime.utcnow(),
             'sub': userid
         }
@@ -51,6 +44,7 @@ def decode_auth_token(auth_token):
         payload = jwt.decode(auth_token, Config.SECRET)
         return payload['sub']
     except Exception as e:
+        print('error', e)
         return None
 
 
@@ -88,7 +82,8 @@ def create_user():
         if password != confirm_password:
             return jsonify({'response': 'password does not match'}), 409
         if len(password) < 8:
-            return jsonify({'response': 'password must be 8 values or more'}), 409
+            return jsonify({'response':
+                            'password must be 8 values or more'}), 409
         """
         search if the user exists in the database
         """
@@ -101,6 +96,7 @@ def create_user():
             return jsonify({'response': 'user already exists'}), 409
 
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
+        print('error', e)
         return jsonify({'response': 'something went wrong'}), 400
 
 
@@ -112,13 +108,11 @@ def login_user():
     form = request.get_json()
     email = form['email']
     password = form['password']
-    first_name = ""
-    last_name = ""
     try:
         """
         look for the user in the database and compare passwords
         """
-        login_user = User(email, first_name, last_name, password)
+        login_user = User(email, "", "", password)
         login_user.user_email_exists()
         if check_password_hash(login_user.user[4], password):
             """
@@ -126,11 +120,13 @@ def login_user():
             """
             token = jwt_auth_encode(login_user.user[0])
             if token:
-                response = {'response': 'login successful', 'token': token.decode()
+                response = {'response': 'login successful',
+                            'token': token.decode()
                             }
                 return jsonify(response), 200
         else:
-            return jsonify({'response': 'Please enter the correct user details'}), 409
+            return jsonify({'response':
+                            'Please enter the correct user details'}), 409
     except (psycopg2.DatabaseError, psycopg2.IntegrityError, Exception) as e:
-        print('e', e)
+        print('error', e)
         return jsonify({'response': 'user not found'}), 409
